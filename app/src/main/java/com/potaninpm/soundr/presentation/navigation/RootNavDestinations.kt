@@ -1,0 +1,12 @@
+package com.potaninpm.soundr.presentation.navigation
+
+import kotlinx.serialization.Serializable
+
+sealed class RootNavDestinations {
+
+    @Serializable
+    data object Home : RootNavDestinations()
+
+    @Serializable
+    data object Welcome : RootNavDestinations()
+}
