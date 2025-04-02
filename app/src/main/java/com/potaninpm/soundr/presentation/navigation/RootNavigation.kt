@@ -8,7 +8,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.potaninpm.soundr.presentation.screens.CalendarScreen
 import com.potaninpm.soundr.presentation.screens.HomeScreen
+import com.potaninpm.soundr.presentation.screens.ProfileScreen
 import com.potaninpm.soundr.presentation.screens.WelcomeScreen
 
 @Composable
@@ -33,6 +35,14 @@ fun RootNavigation() {
 
         composable<RootNavDestinations.Home> {
             HomeScreen(navController = rootNavController)
+        }
+
+        composable<RootNavDestinations.Profile> {
+            ProfileScreen()
+        }
+
+        composable<RootNavDestinations.Calendar> {
+            CalendarScreen()
         }
     }
 }

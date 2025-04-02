@@ -9,4 +9,10 @@ sealed class RootNavDestinations {
 
     @Serializable
     data object Welcome : RootNavDestinations()
+
+    @Serializable
+    data object Profile : RootNavDestinations()
+
+    @Serializable
+    data object Calendar : RootNavDestinations()
 }
