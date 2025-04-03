@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -54,15 +55,13 @@ fun WelcomeScreen(
 private fun WelcomeScreenContent(
     onGetStartedButtonClicked: () -> Unit = {}
 ) {
-    Surface(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp)
-            .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Vertical)),
-        color = MaterialTheme.colorScheme.background
-    ) {
+    Surface {
         Column(
-            verticalArrangement = Arrangement.SpaceAround
+            verticalArrangement = Arrangement.SpaceAround,
+            modifier = Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Vertical)),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_launcher_background),
@@ -78,7 +77,9 @@ private fun WelcomeScreenContent(
             Text(
                 text = "Это приложение поможет вам добиться четкого произношения звука 'Р', а также четко произносить слова с этим звуком.",
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .align(Alignment.CenterHorizontally)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
