@@ -36,17 +36,20 @@ import androidx.compose.ui.unit.sp
 import java.time.LocalDate
 
 @Composable
-fun TrainingsStatsCard() {
+fun TrainingsStatsCard(
+    onClick: () -> Unit = {}
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 12.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.background
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 5.dp
-        )
+        ),
+        onClick = onClick
     ) {
         Column(
             modifier = Modifier
@@ -159,11 +162,12 @@ fun TrainingsStatsCard() {
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold
                         )
+
                         Spacer(modifier = Modifier.width(4.dp))
+
                         Text(
                             text = "Day Streak",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = Color.Black
+                            style = MaterialTheme.typography.bodyLarge
                         )
                     }
 
