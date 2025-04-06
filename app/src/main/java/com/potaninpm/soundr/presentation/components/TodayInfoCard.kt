@@ -25,8 +25,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -77,7 +79,7 @@ fun NotificationsInfo() {
     val minutes = notificationTimeInMinutes % 60
 
     val onChangeClick = {
-
+        sharedPrefs.edit().putInt("notification_in", -1).apply()
     }
 
     val onConfigureClick = {
@@ -99,15 +101,15 @@ fun NotificationsInfo() {
 
 
         if (notificationTimeInMinutes == -1) {
-            Button(
+            TrainButton(
                 onClick = onConfigureClick,
+                text = "Настроить уведомления",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 12.dp),
-                shape = RoundedCornerShape(16.dp)
-            ) {
-                Text(text = "Настроить частоту")
-            }
+                    .padding(vertical = 16.dp),
+                shape = 12,
+                color = MaterialTheme.colorScheme.primary
+            )
         } else {
             Row(
                 modifier = Modifier
@@ -121,11 +123,12 @@ fun NotificationsInfo() {
                             val strokeWidth = 2.dp.toPx()
                             val dashWidth = 10.dp.toPx()
                             val gapWidth = 6.dp.toPx()
+
                             drawRoundRect(
                                 color = Color.Gray,
                                 size = size,
-                                cornerRadius = androidx.compose.ui.geometry.CornerRadius(8.dp.toPx()),
-                                style = androidx.compose.ui.graphics.drawscope.Stroke(
+                                cornerRadius = CornerRadius(8.dp.toPx()),
+                                style = Stroke(
                                     width = strokeWidth,
                                     pathEffect = PathEffect.dashPathEffect(
                                         floatArrayOf(
@@ -146,7 +149,7 @@ fun NotificationsInfo() {
                     )
                 }
 
-                Spacer(modifier = Modifier.width(16.dp))
+                /*Spacer(modifier = Modifier.width(16.dp))
 
                 Icon(
                     painter = painterResource(R.drawable.edit_24px),
@@ -155,7 +158,7 @@ fun NotificationsInfo() {
                         .clickable { onChangeClick() }
                         .size(24.dp)
                         .align(Alignment.CenterVertically)
-                )
+                )*/
             }
         }
     }

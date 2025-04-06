@@ -37,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.potaninpm.soundr.domain.model.TrainingInfo
+import com.potaninpm.soundr.domain.model.UserInfo
 import com.potaninpm.soundr.presentation.components.TodayInfoCard
 import com.potaninpm.soundr.presentation.components.TrainingsStatsCard
 import com.potaninpm.soundr.presentation.navigation.RootNavDestinations
@@ -52,7 +53,7 @@ fun HomeScreen(
     val scope = rememberCoroutineScope()
     var selectedTab by remember { mutableIntStateOf(0) }
     val pagerState = rememberPagerState(
-        pageCount = { 2 }
+        pageCount = { 3 }
     )
 
     val trainings = listOf(
@@ -80,6 +81,7 @@ fun HomeScreen(
 
     val allHeaders = listOf(
         "Home",
+        "Calendar",
         "Profile"
     )
 
@@ -144,7 +146,8 @@ fun HomeScreen(
                     trainings = trainings,
                     navController = navController
                 )
-                1 -> ProfileScreen()
+                1 -> CalendarScreen()
+                2 -> ProfileScreen()
             }
         }
     }
@@ -165,6 +168,14 @@ private fun HomeScreenContent(
                 .padding(top = 6.dp)
         ) {
             TrainingsStatsCard(
+                userInfo = UserInfo(
+                    name = "John Doe",
+                    streak = 5,
+                    bestStreak = 10,
+                    totalTrainings = 20,
+                    totalTrainingsTime = 300,
+                    progress = 0.75f
+                ),
                 onClick = {
                     navController.navigate(RootNavDestinations.Calendar)
                 }

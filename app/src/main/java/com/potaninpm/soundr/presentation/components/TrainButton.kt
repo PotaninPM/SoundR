@@ -17,14 +17,16 @@ import androidx.compose.ui.unit.dp
 fun TrainButton(
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    shape: Int = 12,
+    color: Color = Color(0xFF2C9EFF)
 ) {
     Button(
         onClick = onClick,
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(shape.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF58B2FF),
-            contentColor = Color.White
+            containerColor = color,
+            contentColor = MaterialTheme.colorScheme.surface
         ),
         modifier = modifier
             .height(40.dp)
