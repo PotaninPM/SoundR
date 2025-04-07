@@ -40,7 +40,6 @@ import com.potaninpm.soundr.domain.model.TrainingInfo
 import com.potaninpm.soundr.domain.model.UserInfo
 import com.potaninpm.soundr.presentation.components.TodayInfoCard
 import com.potaninpm.soundr.presentation.components.TrainingsStatsCard
-import com.potaninpm.soundr.presentation.navigation.RootNavDestinations
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -56,28 +55,27 @@ fun HomeScreen(
         pageCount = { 3 }
     )
 
-    val trainings = listOf(
-        TrainingInfo(
-            id = 1,
-            date = LocalDate.of(2025, 3, 21),
-            progress = 80,
-            timeStart = 121231231313L,
-            timeEnd = 131231231313L,
-            duration = 9999L,
-            allExercisesId = listOf(1, 2, 3),
-            madeExercisesId = listOf(1, 2)
-        ),
-        TrainingInfo(
-            id = 1,
-            date = LocalDate.of(2025, 3, 21),
-            progress = 80,
-            timeStart = 121231231313L,
-            timeEnd = 131231231313L,
-            duration = 9999L,
-            allExercisesId = listOf(1, 2, 3),
-            madeExercisesId = listOf(1, 2)
-        )
-    )
+    val trainings = emptyList<TrainingInfo>()
+//        TrainingInfo(
+//            id = 1,
+//            date = LocalDate.of(2025, 3, 21),
+//            progress = 80,
+//            timeStart = 121231231313L,
+//            timeEnd = 131231231313L,
+//            duration = 9999L,
+//            allExercisesId = listOf(1, 2, 3),
+//            madeExercisesId = listOf(1, 2)
+//        ),
+//        TrainingInfo(
+//            id = 1,
+//            date = LocalDate.of(2025, 3, 21),
+//            progress = 80,
+//            timeStart = 121231231313L,
+//            timeEnd = 131231231313L,
+//            duration = 9999L,
+//            allExercisesId = listOf(1, 2, 3),
+//            madeExercisesId = listOf(1, 2)
+//        )
 
     val allHeaders = listOf(
         "Home",
@@ -144,7 +142,13 @@ fun HomeScreen(
             when (page) {
                 0 -> HomeScreenContent(
                     trainings = trainings,
-                    navController = navController
+                    navController = navController,
+                    onCardClick = {
+                        selectedTab = 1
+                        scope.launch {
+                            pagerState.animateScrollToPage(1)
+                        }
+                    }
                 )
                 1 -> CalendarScreen()
                 2 -> ProfileScreen()
@@ -156,7 +160,8 @@ fun HomeScreen(
 @Composable
 private fun HomeScreenContent(
     navController: NavController,
-    trainings: List<TrainingInfo>
+    trainings: List<TrainingInfo>,
+    onCardClick: () -> Unit = {}
 ) {
     Surface(
         modifier = Modifier
@@ -177,7 +182,7 @@ private fun HomeScreenContent(
                     progress = 0.75f
                 ),
                 onClick = {
-                    navController.navigate(RootNavDestinations.Calendar)
+                    onCardClick()
                 }
             )
 
