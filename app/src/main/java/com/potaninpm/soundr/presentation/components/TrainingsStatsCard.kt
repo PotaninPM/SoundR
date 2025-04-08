@@ -10,18 +10,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -30,23 +26,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.potaninpm.soundr.domain.model.UserInfo
 import java.time.LocalDate
 
 @Composable
-fun TrainingsStatsCard() {
+fun TrainingsStatsCard(
+    userInfo: UserInfo,
+    onClick: () -> Unit = {}
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 12.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.background
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 5.dp
-        )
+        ),
+        onClick = onClick
     ) {
         Column(
             modifier = Modifier
@@ -58,19 +58,10 @@ fun TrainingsStatsCard() {
                     .padding(horizontal = 16.dp, vertical = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally)
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = "45",
-                        style = MaterialTheme.typography.headlineLarge,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 32.sp
-                    )
-                    Text(
-                        text = "Trainings",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray
-                    )
-                }
+                UpperStatsPart(
+                    header = userInfo.totalTrainingsTime.toString(),
+                    description = "Minutes"
+                )
 
                 VerticalDivider(
                     modifier = Modifier
@@ -79,22 +70,21 @@ fun TrainingsStatsCard() {
                     color = Color.LightGray
                 )
 
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "573",
-                        style = MaterialTheme.typography.headlineLarge,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 32.sp
-                    )
+                UpperStatsPart(
+                    progress = userInfo.progress
+                )
 
-                    Text(
-                        text = "Minutes",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray
-                    )
-                }
+                VerticalDivider(
+                    modifier = Modifier
+                        .height(50.dp)
+                        .align(Alignment.CenterVertically),
+                    color = Color.LightGray
+                )
+
+                UpperStatsPart(
+                    header = userInfo.totalTrainings.toString(),
+                    description = "Trainings"
+                )
             }
 
             HorizontalDivider(
@@ -139,7 +129,7 @@ fun TrainingsStatsCard() {
 
                 WeekDaysRowAuto()
 
-                Spacer(modifier = Modifier.height(24.dp))
+                /*Spacer(modifier = Modifier.height(24.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -159,11 +149,12 @@ fun TrainingsStatsCard() {
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold
                         )
+
                         Spacer(modifier = Modifier.width(4.dp))
+
                         Text(
                             text = "Day Streak",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = Color.Black
+                            style = MaterialTheme.typography.bodyLarge
                         )
                     }
 
@@ -172,9 +163,39 @@ fun TrainingsStatsCard() {
                         style = MaterialTheme.typography.bodyMedium,
                         color = Color.Gray
                     )
-                }
+                }*/
             }
         }
+    }
+}
+
+@Composable
+fun UpperStatsPart(
+    progress: Float = -1f,
+    header: String = "",
+    description: String = ""
+) {
+    if (progress == -1f) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = header,
+                style = MaterialTheme.typography.headlineLarge,
+                fontWeight = FontWeight.Bold,
+                fontSize = 32.sp
+            )
+
+            Text(
+                text = description,
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.Gray
+            )
+        }
+    } else {
+        CustomProgressBar(
+            progress = progress
+        )
     }
 }
 
@@ -182,8 +203,8 @@ fun TrainingsStatsCard() {
 private fun WeekDaysRowAuto() {
     val today = LocalDate.now()
 
-    val offset = if (today.dayOfWeek.value == 7) 0L else today.dayOfWeek.value.toLong()
-    val monday = today.minusDays(offset - 1)
+    val offset = if (today.dayOfWeek.value == 6) 0L else today.dayOfWeek.value.toLong() - 1
+    val monday = today.minusDays(offset)
     val weekDays = List(7) { dayIndex -> monday.plusDays(dayIndex.toLong()) }
 
     Row(
@@ -221,7 +242,7 @@ private fun DayWithNumber(
             modifier = Modifier
                 .size(36.dp)
                 .clip(CircleShape)
-                .background(if (isToday) MaterialTheme.colorScheme.onSurface else Color.Transparent),
+                .background(if (isToday) MaterialTheme.colorScheme.primary else Color.Transparent),
             contentAlignment = Alignment.Center
         ) {
             if (dayNumber.isNotEmpty()) {
@@ -232,13 +253,5 @@ private fun DayWithNumber(
                 )
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun WorkoutStatsCardPreview() {
-    Surface {
-        TrainingsStatsCard()
     }
 }
