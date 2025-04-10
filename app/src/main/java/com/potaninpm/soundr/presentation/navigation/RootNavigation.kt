@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import com.potaninpm.soundr.presentation.screens.CalendarScreen
 import com.potaninpm.soundr.presentation.screens.HomeScreen
 import com.potaninpm.soundr.presentation.screens.ProfileScreen
+import com.potaninpm.soundr.presentation.screens.TrainingScreen
 import com.potaninpm.soundr.presentation.screens.WelcomeScreen
 
 @Composable
@@ -43,6 +44,10 @@ fun RootNavigation() {
 
         composable<RootNavDestinations.Calendar> {
             CalendarScreen()
+        }
+
+        composable<RootNavDestinations.Training> {
+            TrainingScreen()
         }
     }
 }

@@ -40,7 +40,8 @@ import java.time.LocalDate
 
 @Composable
 fun TodayInfoCard(
-    trainings: List<TrainingInfo>
+    trainings: List<TrainingInfo>,
+    onStartTrainingClick: () -> Unit
 ) {
     val date = LocalDate.now()
 
@@ -57,7 +58,10 @@ fun TodayInfoCard(
     ) {
         TrainingsInfo(
             date = date,
-            trainings = trainings
+            trainings = trainings,
+            onStartTrainingClick = {
+                onStartTrainingClick()
+            }
         )
     }
 }
@@ -313,7 +317,8 @@ fun TextCircle(
 @Composable
 fun TrainingsInfo(
     date: LocalDate,
-    trainings: List<TrainingInfo>
+    trainings: List<TrainingInfo>,
+    onStartTrainingClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -335,7 +340,7 @@ fun TrainingsInfo(
         TrainButton(
             text = "Train",
             onClick = {
-
+                onStartTrainingClick()
             }
         )
 

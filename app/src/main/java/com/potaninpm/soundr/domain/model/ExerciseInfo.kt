@@ -4,6 +4,6 @@ data class ExerciseInfo(
     val id: Int,
     val name: String,
     val description: String,
-    val videoName: String,
+    val videoId: String,
     val timesToDo: Int
 )

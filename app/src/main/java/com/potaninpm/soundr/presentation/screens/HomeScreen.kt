@@ -49,6 +49,7 @@ import com.potaninpm.soundr.domain.model.UserInfo
 import com.potaninpm.soundr.presentation.components.NotificationsInfo
 import com.potaninpm.soundr.presentation.components.TodayInfoCard
 import com.potaninpm.soundr.presentation.components.TrainingsStatsCard
+import com.potaninpm.soundr.presentation.navigation.RootNavDestinations
 import com.potaninpm.soundr.presentation.viewModel.NotificationViewModel
 import kotlinx.coroutines.launch
 
@@ -197,9 +198,14 @@ private fun HomeScreenContent(
 
         Spacer(modifier = Modifier.padding(8.dp))
 
-        TodayInfoCard(trainings)
+        TodayInfoCard(
+            trainings = trainings,
+            onStartTrainingClick = {
+                navController.navigate(RootNavDestinations.Training)
+            }
+        )
 
-        Spacer(modifier = Modifier.padding(4.dp))
+        Spacer(modifier = Modifier.padding(8.dp))
 
         NotificationsInfo(
             reminders = reminders,
