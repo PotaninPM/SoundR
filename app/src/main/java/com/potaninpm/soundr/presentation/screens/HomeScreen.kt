@@ -1,21 +1,27 @@
 package com.potaninpm.soundr.presentation.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -24,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -35,13 +42,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.potaninpm.soundr.domain.model.TrainingInfo
 import com.potaninpm.soundr.domain.model.UserInfo
+import com.potaninpm.soundr.presentation.components.NotificationsInfo
 import com.potaninpm.soundr.presentation.components.TodayInfoCard
 import com.potaninpm.soundr.presentation.components.TrainingsStatsCard
+import com.potaninpm.soundr.presentation.viewModel.NotificationViewModel
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -146,7 +155,7 @@ fun HomeScreen(
                     onCardClick = {
                         selectedTab = 1
                         scope.launch {
-                            pagerState.animateScrollToPage(1)
+                            pagerState.animateScrollToPage(selectedTab)
                         }
                     }
                 )
@@ -161,35 +170,48 @@ fun HomeScreen(
 private fun HomeScreenContent(
     navController: NavController,
     trainings: List<TrainingInfo>,
-    onCardClick: () -> Unit = {}
+    onCardClick: () -> Unit = {},
+    viewModel: NotificationViewModel = hiltViewModel()
 ) {
-    Surface(
+    val reminders by viewModel.reminders.collectAsState()
+
+    Column(
         modifier = Modifier
-            .fillMaxSize(),
-        color = MaterialTheme.colorScheme.surface
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surface)
+            .verticalScroll(rememberScrollState()),
     ) {
-        Column(
-            modifier = Modifier
-                .padding(top = 6.dp)
-        ) {
-            TrainingsStatsCard(
-                userInfo = UserInfo(
-                    name = "John Doe",
-                    streak = 5,
-                    bestStreak = 10,
-                    totalTrainings = 20,
-                    totalTrainingsTime = 300,
-                    progress = 0.75f
-                ),
-                onClick = {
-                    onCardClick()
-                }
-            )
+        TrainingsStatsCard(
+            userInfo = UserInfo(
+                name = "John Doe",
+                streak = 5,
+                bestStreak = 10,
+                totalTrainings = 20,
+                totalTrainingsTime = 300,
+                progress = 0.75f
+            ),
+            onClick = {
+                onCardClick()
+            }
+        )
 
-            Spacer(modifier = Modifier.padding(8.dp))
+        Spacer(modifier = Modifier.padding(8.dp))
 
-            TodayInfoCard(trainings)
-        }
+        TodayInfoCard(trainings)
 
+        Spacer(modifier = Modifier.padding(4.dp))
+
+        NotificationsInfo(
+            reminders = reminders,
+            onConfirmTime = { newReminder ->
+                viewModel.insertReminder(newReminder)
+            },
+            onUpdateReminder = { newReminder ->
+                viewModel.updateReminder(newReminder)
+            },
+            onDeleteReminder = { reminderToDelete ->
+                viewModel.deleteReminder(reminderToDelete)
+            }
+        )
     }
 }

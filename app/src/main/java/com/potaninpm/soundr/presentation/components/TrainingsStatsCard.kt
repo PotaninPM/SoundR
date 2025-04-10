@@ -249,7 +249,8 @@ private fun DayWithNumber(
                 Text(
                     text = dayNumber,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = if (isToday) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.onSurface
+                    color = if (isToday) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.onSurface,
+                    fontWeight = if (isToday) FontWeight.Bold else FontWeight.Normal
                 )
             }
         }
