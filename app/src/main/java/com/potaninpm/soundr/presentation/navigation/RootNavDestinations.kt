@@ -8,6 +8,9 @@ sealed class RootNavDestinations {
     data object Home : RootNavDestinations()
 
     @Serializable
+    data object Training : RootNavDestinations()
+
+    @Serializable
     data object Welcome : RootNavDestinations()
 
     @Serializable

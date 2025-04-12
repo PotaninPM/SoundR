@@ -49,7 +49,8 @@ dependencies {
     implementation((libs.kotlinx.serialization.json))
     implementation(libs.androidx.navigation.compose)
 
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation(libs.gson)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // Room
     ksp(libs.androidx.room.compiler)
