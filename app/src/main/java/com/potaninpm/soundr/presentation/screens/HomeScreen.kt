@@ -1,5 +1,6 @@
 package com.potaninpm.soundr.presentation.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.scrollable
@@ -21,7 +22,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -30,20 +33,25 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.potaninpm.soundr.R
 import com.potaninpm.soundr.domain.model.TrainingInfo
 import com.potaninpm.soundr.domain.model.UserInfo
 import com.potaninpm.soundr.presentation.components.NotificationsInfo
@@ -66,26 +74,6 @@ fun HomeScreen(
     )
 
     val trainings = emptyList<TrainingInfo>()
-//        TrainingInfo(
-//            id = 1,
-//            date = LocalDate.of(2025, 3, 21),
-//            progress = 80,
-//            timeStart = 121231231313L,
-//            timeEnd = 131231231313L,
-//            duration = 9999L,
-//            allExercisesId = listOf(1, 2, 3),
-//            madeExercisesId = listOf(1, 2)
-//        ),
-//        TrainingInfo(
-//            id = 1,
-//            date = LocalDate.of(2025, 3, 21),
-//            progress = 80,
-//            timeStart = 121231231313L,
-//            timeEnd = 131231231313L,
-//            duration = 9999L,
-//            allExercisesId = listOf(1, 2, 3),
-//            madeExercisesId = listOf(1, 2)
-//        )
 
     val allHeaders = listOf(
         "Home",
@@ -218,6 +206,6 @@ private fun HomeScreenContent(
             onDeleteReminder = { reminderToDelete ->
                 viewModel.deleteReminder(reminderToDelete)
             }
-        )
+)
     }
 }

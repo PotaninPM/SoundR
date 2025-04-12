@@ -47,7 +47,7 @@ fun RootNavigation() {
         }
 
         composable<RootNavDestinations.Training> {
-            TrainingScreen()
+            TrainingScreen(navController = rootNavController)
         }
     }
 }

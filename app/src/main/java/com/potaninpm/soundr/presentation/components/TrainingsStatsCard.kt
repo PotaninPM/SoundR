@@ -203,7 +203,7 @@ fun UpperStatsPart(
 private fun WeekDaysRowAuto() {
     val today = LocalDate.now()
 
-    val offset = if (today.dayOfWeek.value == 6) 0L else today.dayOfWeek.value.toLong() - 1
+    val offset = today.dayOfWeek.value.toLong() - 1
     val monday = today.minusDays(offset)
     val weekDays = List(7) { dayIndex -> monday.plusDays(dayIndex.toLong()) }
 
