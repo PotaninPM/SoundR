@@ -3,7 +3,9 @@ package com.potaninpm.soundr.presentation.screens
 import android.net.Uri
 import android.widget.VideoView
 import androidx.annotation.RawRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +18,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,7 +59,7 @@ import com.potaninpm.soundr.presentation.viewModel.TrainingViewModel
 
 @Composable
 fun TrainingScreen(
-    navController: NavController? = null,
+    navController: NavController,
     viewModel: TrainingViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -72,48 +77,24 @@ fun TrainingScreen(
                 )
             }
             uiState.error != null -> {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = "Error: ${uiState.error}",
-                        color = Color.Red
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Button(onClick = { navController?.navigateUp() }) {
-                        Text("Go Back")
-                    }
-                }
+                ErrorWithTraining(
+                    onGoBackClick = {
+                        navController.navigateUp()
+                    },
+                    error = uiState.error.toString()
+                )
             }
             uiState.isCompleted -> {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = "Training Complete!",
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Button(onClick = { viewModel.resetTraining() }) {
-                        Text("Start Again")
+                TrainingCompleted(
+                    onResetTrainingClick = {
+                        viewModel.resetTraining()
+                    },
+                    onBackHomeClick = {
+                        navController.navigate(RootNavDestinations.Home)
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    OutlinedButton(onClick = { navController?.navigate(RootNavDestinations.Home) }) {
-                        Text("Return Home")
-                    }
-                }
+                )
             }
             else -> {
-                // Show exercise content
                 TrainingScreenContent(
                     exercise = uiState.currentExercise,
                     onNextClick = { viewModel.nextExercise() },
@@ -123,6 +104,77 @@ fun TrainingScreen(
                     totalExercises = uiState.exercises.size
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun ErrorWithTraining(
+    error: String,
+    onGoBackClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.primary)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Color(57, 15, 87)
+
+        Text(
+            text = "Error: $error",
+            color = Color.Red
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = {
+                onGoBackClick()
+            }
+        ) {
+            Text("Go Back")
+        }
+    }
+}
+
+@Composable
+fun TrainingCompleted(
+    onResetTrainingClick: () -> Unit,
+    onBackHomeClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "Training Complete!",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = {
+                onResetTrainingClick()
+            }
+        ) {
+            Text("Start Again")
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OutlinedButton(
+            onClick = {
+                onBackHomeClick()
+            }
+        ) {
+            Text("Return Home")
         }
     }
 }
@@ -170,6 +222,7 @@ private fun TrainingScreenContent(
     exerciseIndex: Int,
     totalExercises: Int
 ) {
+
     if (exercise == null) return
 
     val videoResId = when (exercise.videoId) {
@@ -191,8 +244,7 @@ private fun TrainingScreenContent(
         )
         
         Spacer(modifier = Modifier.height(16.dp))
-        
-        // Video
+
         TrainingVideo(
             modifier = Modifier
                 .height(250.dp)
@@ -202,8 +254,7 @@ private fun TrainingScreenContent(
         )
         
         Spacer(modifier = Modifier.height(16.dp))
-        
-        // Exercise details
+
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
@@ -239,8 +290,7 @@ private fun TrainingScreenContent(
         }
         
         Spacer(modifier = Modifier.height(24.dp))
-        
-        // Navigation buttons
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
