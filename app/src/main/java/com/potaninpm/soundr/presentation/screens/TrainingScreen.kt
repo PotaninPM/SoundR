@@ -25,18 +25,24 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -101,7 +107,8 @@ fun TrainingScreen(
                     onPrevClick = { viewModel.prevExercise() },
                     onSkipClick = { viewModel.skipExercise() },
                     exerciseIndex = uiState.exercises.indexOfFirst { it.id == uiState.currentExercise?.id },
-                    totalExercises = uiState.exercises.size
+                    totalExercises = uiState.exercises.size,
+                    videoResId = R.raw.video1
                 )
             }
         }
@@ -121,8 +128,6 @@ fun ErrorWithTraining(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Color(57, 15, 87)
-
         Text(
             text = "Error: $error",
             color = Color.Red
@@ -213,8 +218,10 @@ fun TrainingVideo(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TrainingScreenContent(
+    videoResId: Int,
     exercise: ExerciseInfo?,
     onNextClick: () -> Unit,
     onPrevClick: () -> Unit,
@@ -222,108 +229,155 @@ private fun TrainingScreenContent(
     exerciseIndex: Int,
     totalExercises: Int
 ) {
-
     if (exercise == null) return
 
-    val videoResId = when (exercise.videoId) {
-        "video1" -> R.raw.video1
-        else -> R.raw.video1
+    // Состояние для BottomSheetScaffold
+    val sheetState = rememberStandardBottomSheetState(
+        initialValue = SheetValue.Expanded // свёрнуто по умолчанию
+    )
+    val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = sheetState)
+
+    // Определяем динамическую высоту видео в зависимости от прогресса bottom sheet:
+    // Если лист свёрнут (Collapsed) – видео занимает больше места,
+    // Если развёрнут (Expanded) – видео занимает меньше места.
+    // Здесь просто выбираем два фиксированных значения для примера.
+    val expandedVideoHeight = 300.dp
+    val collapsedVideoHeight = 450.dp
+
+    val videoHeight by remember {
+        derivedStateOf {
+            if (sheetState.currentValue == SheetValue.Expanded) {
+                expandedVideoHeight
+            } else {
+                collapsedVideoHeight
+            }
+        }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Exercise ${exerciseIndex + 1} of $totalExercises",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-        )
-        
-        Spacer(modifier = Modifier.height(16.dp))
-
-        TrainingVideo(
-            modifier = Modifier
-                .height(250.dp)
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp)),
-            videoId = videoResId
-        )
-        
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant
-            ),
-            shape = RoundedCornerShape(16.dp)
-        ) {
+    BottomSheetScaffold(
+        scaffoldState = scaffoldState,
+        sheetPeekHeight = 80.dp,  // минимальная высота нижнего листа (например, оставляет кнопки видимыми)
+        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+        sheetContent = {
+            // Здесь располагаем информацию, которая показывается в BottomSheet при развёрнутом состоянии.
+            // Если лист свёрнут, можно показывать только подсказку или кнопки.
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
             ) {
-                Text(
-                    text = exercise.name,
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold
-                )
-                
-                Spacer(modifier = Modifier.height(8.dp))
-                
-                Text(
-                    text = "Repeat ${exercise.timesToDo} times",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.primary
-                )
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                Text(
-                    text = exercise.description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Start
-                )
-            }
-        }
-        
-        Spacer(modifier = Modifier.height(24.dp))
+                if (sheetState.currentValue == SheetValue.Expanded) {
+                    Text(
+                        text = exercise.name,
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = exercise.description,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Button(
-                onClick = onPrevClick,
-                enabled = exerciseIndex > 0,
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("Back")
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Vertical)),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        OutlinedButton(
+                            onClick = onPrevClick,
+                            enabled = exerciseIndex > 0,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text("Back")
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Button(
+                            onClick = onNextClick,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text("Next")
+                        }
+                    }
+                } else {
+                    // При свёрнутом состоянии отображаем подсказку
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Vertical)),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        OutlinedButton(
+                            onClick = onPrevClick,
+                            enabled = exerciseIndex > 0,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text("Back")
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Button(
+                            onClick = onNextClick,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text("Next")
+                        }
+                    }
+                }
             }
-            
-            Spacer(modifier = Modifier.padding(4.dp))
-            
-            OutlinedButton(
-                onClick = onSkipClick,
-                modifier = Modifier.weight(1f)
+        },
+        content = { innerPadding ->
+            // Основной контент – видео и кнопки управления
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Skip")
-            }
-            
-            Spacer(modifier = Modifier.padding(4.dp))
-            
-            Button(
-                onClick = onNextClick,
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("Next")
+                // Информационный заголовок (опционально)
+                Text(
+                    text = "Exercise ${exerciseIndex + 1} of $totalExercises",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                // Видео. Его высота меняется в зависимости от состояния BottomSheet.
+                TrainingVideo(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(videoHeight)
+                        .clip(RoundedCornerShape(16.dp)),
+                    videoId = videoResId
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                // Кнопки управления. Они всегда видны под видео.
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    OutlinedButton(
+                        onClick = onPrevClick,
+                        enabled = exerciseIndex > 0,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("Back")
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Button(
+                        onClick = onNextClick,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("Next")
+                    }
+                }
             }
         }
-    }
+    )
 }
 
+/*
 @Preview
 @Composable
 private fun TrainingScreenDarkPreview() {
@@ -369,4 +423,5 @@ private fun TrainingScreenLightPreview() {
         )
     }
 }
+*/
 

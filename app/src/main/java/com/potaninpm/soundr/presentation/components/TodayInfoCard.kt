@@ -1,13 +1,14 @@
 package com.potaninpm.soundr.presentation.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -15,7 +16,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -30,9 +33,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.potaninpm.soundr.R
 import com.potaninpm.soundr.data.local.entities.NotificationReminder
 import com.potaninpm.soundr.domain.model.NotificationDayInfo
 import com.potaninpm.soundr.domain.model.TrainingInfo
@@ -41,40 +46,92 @@ import java.time.LocalDate
 @Composable
 fun TodayInfoCard(
     trainings: List<TrainingInfo>,
-    onStartTrainingClick: () -> Unit
+    onStartTrainingClick: () -> Unit = {}
 ) {
     val date = LocalDate.now()
 
-    Card(
+    OutlinedCard(
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.background
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 5.dp
-        )
-    ) {
-        TrainingsInfo(
-            date = date,
-            trainings = trainings,
-            onStartTrainingClick = {
-                onStartTrainingClick()
+            .padding(horizontal = 12.dp, vertical = 4.dp)
+            .clickable {
+
             }
-        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(horizontal = 16.dp, vertical = 16.dp)
+        ) {
+            Text(
+                "Today",
+                fontWeight = FontWeight.Bold
+            )
+
+            Text(
+                text = "${date.month.name} ${date.dayOfMonth}, ${date.year}",
+                color = Color.Gray,
+            )
+
+            if (trainings.isNotEmpty()) {
+
+                Spacer(modifier = Modifier.padding(4.dp))
+
+                trainings.forEach { training ->
+                    TrainingView(training = training)
+                }
+
+                Spacer(modifier = Modifier.padding(6.dp))
+
+                TrainButton(
+                    text = "Train",
+                    onClick = {
+                        onStartTrainingClick()
+                    }
+                )
+            } else {
+
+                Spacer(modifier = Modifier.padding(6.dp))
+
+                TrainButton(
+                    text = "Train",
+                    onClick = {
+                        onStartTrainingClick()
+                    }
+                )
+
+                Spacer(modifier = Modifier.padding(6.dp))
+
+                Text(
+                    text = "Сегодня вы не тренировались",
+                    color = Color.Gray,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                )
+            }
+        }
     }
 }
 
 @Composable
 fun NotificationsInfo(
+    showNotifications: Boolean = true,
     reminders: List<NotificationReminder>,
     onConfirmTime: (NotificationReminder) -> Unit,
     onUpdateReminder: (NotificationReminder) -> Unit,
-    onDeleteReminder: (NotificationReminder) -> Unit
+    onDeleteReminder: (NotificationReminder) -> Unit,
+    onShowNotificationsChange: (Boolean) -> Unit
 ) {
     var showNewTimePicker by remember { mutableStateOf(false) }
     var reminderForEdit by remember { mutableStateOf<NotificationReminder?>(null) }
+
+    val showNotificationsPainter = if (showNotifications) {
+        painterResource(R.drawable.visibility_24px)
+    } else {
+        painterResource(R.drawable.visibility_off_24px)
+    }
 
     if (showNewTimePicker) {
         NotificationTimeDialog(
@@ -106,7 +163,7 @@ fun NotificationsInfo(
 //        )
 //    }
 
-    Card(
+    OutlinedCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 12.dp)
@@ -114,64 +171,79 @@ fun NotificationsInfo(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.background
         ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 5.dp
-        )
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surface)
                 .padding(horizontal = 16.dp)
         ) {
-            Text(
-                text = "Уведомления о тренировках",
+            Row(
                 modifier = Modifier
-                    .padding(top = 16.dp)
-                    .fillMaxWidth(),
-                fontWeight = FontWeight.SemiBold,
-                style = MaterialTheme.typography.titleMedium
-            )
-
-            if (reminders.isEmpty()) {
+                    .fillMaxSize()
+                    .padding(vertical = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
-                    text = "Включите уведомления, чтобы получать напоминания о тренировках каждый день",
-                    color = Color.Gray,
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(vertical = 24.dp),
-                    style = MaterialTheme.typography.bodyMedium
+                    text = "Уведомления о тренировках",
+                    fontWeight = FontWeight.SemiBold,
+                    style = MaterialTheme.typography.titleMedium
                 )
-            } else {
-                Column(
-                    modifier = Modifier
-                        .padding(vertical = 4.dp)
-                ) {
-                    reminders.forEach { reminder ->
-                        NotificationItem(
-                            reminder = reminder,
-                            onUpdateReminder = { newReminder ->
-                                onUpdateReminder(newReminder)
-                            },
-                            onDeleteReminder = { reminderToDelete ->
-                                onDeleteReminder(reminderToDelete)
-                            },
-                            onCardClick = {
 
-                            }
-                        )
+                Icon(
+                    painter = showNotificationsPainter,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(27.dp)
+                        .clickable {
+                            onShowNotificationsChange(!showNotifications)
+                        }
+                )
+            }
+            if (showNotifications) {
+                if (reminders.isEmpty()) {
+                    Text(
+                        text = "Включите уведомления, чтобы получать напоминания о тренировках каждый день",
+                        color = Color.Gray,
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(vertical = 24.dp),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                } else {
+                    Column(
+                        modifier = Modifier
+                            .padding(vertical = 4.dp)
+                    ) {
+                        reminders.forEach { reminder ->
+                            NotificationItem(
+                                reminder = reminder,
+                                onUpdateReminder = { newReminder ->
+                                    onUpdateReminder(newReminder)
+                                },
+                                onDeleteReminder = { reminderToDelete ->
+                                    onDeleteReminder(reminderToDelete)
+                                },
+                                onCardClick = {
+
+                                }
+                            )
+                        }
                     }
                 }
-            }
 
-            TrainButton(
-                onClick = { showNewTimePicker = true },
-                text = "Добавить уведомления",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                shape = 12,
-                color = MaterialTheme.colorScheme.primary
-            )
+                TrainButton(
+                    onClick = { showNewTimePicker = true },
+                    text = "Добавить уведомления",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    shape = 12,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
         }
     }
 }
@@ -312,61 +384,6 @@ fun TextCircle(
             .size(5.dp)
     )
 }
-
-
-@Composable
-fun TrainingsInfo(
-    date: LocalDate,
-    trainings: List<TrainingInfo>,
-    onStartTrainingClick: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        Text(
-            "Today",
-            fontWeight = FontWeight.Bold
-        )
-
-        Text(
-            text = "${date.month.name} ${date.dayOfMonth}, ${date.year}",
-            color = Color.Gray,
-        )
-
-        Spacer(modifier = Modifier.padding(6.dp))
-
-        TrainButton(
-            text = "Train",
-            onClick = {
-                onStartTrainingClick()
-            }
-        )
-
-        Spacer(modifier = Modifier.padding(6.dp))
-
-        if (trainings.isNotEmpty()) {
-            trainings.forEach {
-                TrainingView()
-                Text(
-                    text = "${it.timeStart} - ${it.timeEnd} min",
-                    color = Color.Gray,
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                )
-            }
-        } else {
-            Text(
-                text = "Сегодня вы не тренировались",
-                color = Color.Gray,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-            )
-        }
-    }
-}
-
 
 @Preview
 @Composable

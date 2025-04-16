@@ -39,12 +39,13 @@ fun TrainingsStatsCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp),
+            .padding(horizontal = 12.dp)
+            .padding(top = 5.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.background
+            containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 5.dp
+            defaultElevation = 8.dp
         ),
         onClick = onClick
     ) {
