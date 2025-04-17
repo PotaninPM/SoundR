@@ -16,6 +16,7 @@ import com.potaninpm.soundr.presentation.screens.WelcomeScreen
 
 @Composable
 fun RootNavigation() {
+
     val context = LocalContext.current
     val rootNavController = rememberNavController()
     val sharedPrefs = context.getSharedPreferences("soundr", Context.MODE_PRIVATE)
