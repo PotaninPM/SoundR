@@ -157,6 +157,10 @@ private fun HomeScreenContent(
         mutableStateOf(sharedPrefs.getBoolean("show_notifications", true))
     }
 
+    var showTrainings by remember {
+        mutableStateOf(sharedPrefs.getBoolean("show_trainings", true))
+    }
+
     val reminders by notificationViewModel.reminders.collectAsState()
     val todayTrainings by trainingsViewModel.todayTrainings.collectAsState()
 
@@ -186,6 +190,11 @@ private fun HomeScreenContent(
             trainings = todayTrainings,
             onStartTrainingClick = {
                 navController.navigate(RootNavDestinations.Training)
+            },
+            showTrainings = showTrainings,
+            onShowTrainingsChange = { newValue ->
+                sharedPrefs.edit().putBoolean("show_trainings", newValue).apply()
+                showTrainings = newValue
             }
         )
 

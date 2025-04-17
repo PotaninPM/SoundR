@@ -45,10 +45,18 @@ import java.time.LocalDate
 
 @Composable
 fun TodayInfoCard(
+    showTrainings: Boolean = true,
+    onShowTrainingsChange: (Boolean) -> Unit = {},
     trainings: List<TrainingInfo>,
     onStartTrainingClick: () -> Unit = {}
 ) {
     val date = LocalDate.now()
+
+    val showTrainingsPainter = if (showTrainings) {
+        painterResource(R.drawable.visibility_24px)
+    } else {
+        painterResource(R.drawable.visibility_off_24px)
+    }
 
     OutlinedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
@@ -65,22 +73,58 @@ fun TodayInfoCard(
                 .background(MaterialTheme.colorScheme.surface)
                 .padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
-            Text(
-                "Today",
-                fontWeight = FontWeight.Bold
-            )
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Column {
+                    Text(
+                        "Today",
+                        fontWeight = FontWeight.Bold
+                    )
 
-            Text(
-                text = "${date.month.name} ${date.dayOfMonth}, ${date.year}",
-                color = Color.Gray,
-            )
+                    Text(
+                        text = "${date.month.name} ${date.dayOfMonth}, ${date.year}",
+                        color = Color.Gray,
+                    )
+                }
+
+                Icon(
+                    painter = showTrainingsPainter,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .size(27.dp)
+                        .clickable {
+                            onShowTrainingsChange(!showTrainings)
+                        },
+                )
+            }
 
             if (trainings.isNotEmpty()) {
+                if (showTrainings) {
+                    Spacer(modifier = Modifier.padding(4.dp))
 
-                Spacer(modifier = Modifier.padding(4.dp))
-
-                trainings.forEach { training ->
-                    TrainingView(training = training)
+                    trainings.forEach { training ->
+                        TrainingView(training = training)
+                    }
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 12.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Color.Gray.copy(alpha = 0.2f))
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Тренировки скрыты",
+                            color = Color.Gray,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.padding(6.dp))
