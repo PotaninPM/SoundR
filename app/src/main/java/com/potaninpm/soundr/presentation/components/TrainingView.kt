@@ -127,7 +127,7 @@ private fun TimeSection(
     ) {
         Row {
             Icon(
-                imageVector = Icons.Default.Info,
+                painter = painterResource(R.drawable.schedule_24px),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(20.dp)
