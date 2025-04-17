@@ -54,7 +54,8 @@ fun TrainingView(
     ) {
         Row(
             modifier = Modifier
-                .padding(vertical = 16.dp, horizontal = 14.dp)
+                .padding(vertical = 16.dp, horizontal = 14.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             CustomProgressBar(
                 progress = training.progress / 100f
@@ -72,7 +73,7 @@ fun TrainingView(
                     fontWeight = FontWeight.Bold
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 TimeSection(
                     startTime = startTime,
@@ -80,7 +81,7 @@ fun TrainingView(
                     durationMinutes = durationMinutes
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 DoneTrainingsInfo(training)
             }

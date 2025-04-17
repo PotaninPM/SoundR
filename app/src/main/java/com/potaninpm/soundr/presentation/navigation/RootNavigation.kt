@@ -15,7 +15,9 @@ import com.potaninpm.soundr.presentation.screens.TrainingScreen
 import com.potaninpm.soundr.presentation.screens.WelcomeScreen
 
 @Composable
-fun RootNavigation() {
+fun RootNavigation(
+    faceDown: Boolean
+) {
 
     val context = LocalContext.current
     val rootNavController = rememberNavController()
@@ -36,7 +38,10 @@ fun RootNavigation() {
         }
 
         composable<RootNavDestinations.Home> {
-            HomeScreen(navController = rootNavController)
+            HomeScreen(
+                navController = rootNavController,
+                faceDown = faceDown,
+            )
         }
 
         composable<RootNavDestinations.Profile> {

@@ -64,7 +64,7 @@ fun TodayInfoCard(
             .fillMaxWidth()
             .padding(horizontal = 12.dp, vertical = 4.dp)
             .clickable {
-
+                onShowTrainingsChange(!showTrainings)
             }
     ) {
         Column(
