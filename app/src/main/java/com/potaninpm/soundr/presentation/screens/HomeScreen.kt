@@ -43,7 +43,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.potaninpm.soundr.domain.model.TrainingInfo
 import com.potaninpm.soundr.domain.model.UserInfo
 import com.potaninpm.soundr.presentation.components.NotificationsInfo
 import com.potaninpm.soundr.presentation.components.TodayInfoCard

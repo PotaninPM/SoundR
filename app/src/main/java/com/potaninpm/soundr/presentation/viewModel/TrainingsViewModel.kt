@@ -2,7 +2,6 @@ package com.potaninpm.soundr.presentation.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.potaninpm.soundr.data.local.entities.CompletedTraining
 import com.potaninpm.soundr.data.mappers.toTrainingInfo
 import com.potaninpm.soundr.domain.model.TrainingInfo
 import com.potaninpm.soundr.domain.repository.TrainingsRepository
