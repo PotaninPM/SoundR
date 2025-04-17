@@ -64,8 +64,6 @@ fun HomeScreen(
         pageCount = { 3 }
     )
 
-    val trainings = emptyList<TrainingInfo>()
-
     val allHeaders = listOf(
         "Home",
         "Calendar",
@@ -130,7 +128,6 @@ fun HomeScreen(
         ) { page ->
             when (page) {
                 0 -> HomeScreenContent(
-                    trainings = trainings,
                     navController = navController,
                     onCardClick = {
                         selectedTab = 1
@@ -149,7 +146,6 @@ fun HomeScreen(
 @Composable
 private fun HomeScreenContent(
     navController: NavController,
-    trainings: List<TrainingInfo>,
     onCardClick: () -> Unit = {},
     notificationViewModel: NotificationViewModel = hiltViewModel(),
     trainingsViewModel: TrainingsViewModel = hiltViewModel()

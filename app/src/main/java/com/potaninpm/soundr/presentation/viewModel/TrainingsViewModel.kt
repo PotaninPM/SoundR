@@ -3,6 +3,7 @@ package com.potaninpm.soundr.presentation.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.potaninpm.soundr.data.local.entities.CompletedTraining
+import com.potaninpm.soundr.data.mappers.toTrainingInfo
 import com.potaninpm.soundr.domain.model.TrainingInfo
 import com.potaninpm.soundr.domain.repository.TrainingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +20,9 @@ class TrainingsViewModel @Inject constructor(
     private val trainingsRepository: TrainingsRepository
 ) : ViewModel() {
 
+    private val _dayTrainings = MutableStateFlow<List<TrainingInfo>>(emptyList())
+    val dayTrainings: StateFlow<List<TrainingInfo>> = _dayTrainings.asStateFlow()
+
     private val _todayTrainings = MutableStateFlow<List<TrainingInfo>>(emptyList())
     val todayTrainings: StateFlow<List<TrainingInfo>> = _todayTrainings.asStateFlow()
 
@@ -26,26 +30,20 @@ class TrainingsViewModel @Inject constructor(
         loadTodayTrainings()
     }
 
-    private fun loadTodayTrainings() {
+    fun loadTrainingsByDate(date: LocalDate) {
         viewModelScope.launch {
-            val today = LocalDate.now()
-            
-            trainingsRepository.getTrainingsByDate(today).collectLatest { completedTrainings ->
-                _todayTrainings.value = completedTrainings.map { it.toTrainingInfo() }
+            trainingsRepository.getTrainingsByDate(date).collectLatest { completedTrainings ->
+                _dayTrainings.value = completedTrainings.map { it.toTrainingInfo() }
             }
         }
     }
 
-    private fun CompletedTraining.toTrainingInfo(): TrainingInfo {
-        return TrainingInfo(
-            id = this.id.toInt(),
-            date = this.date,
-            progress = (this.progress * 100).toInt(),
-            timeStart = this.startTime,
-            timeEnd = this.endTime,
-            duration = this.duration,
-            allExercisesId = this.allExercisesId.map { it.toInt() },
-            madeExercisesId = this.madeExercisesId.map { it.toInt() }
-        )
+    fun loadTodayTrainings() {
+        viewModelScope.launch {
+            trainingsRepository.getTrainingsByDate(LocalDate.now()).collectLatest { completedTrainings ->
+                _todayTrainings.value = completedTrainings.map { it.toTrainingInfo() }
+                _dayTrainings.value = completedTrainings.map { it.toTrainingInfo() }
+            }
+        }
     }
 } 

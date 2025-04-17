@@ -90,7 +90,7 @@ fun TrainingsStatsCard(
 
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
-                color = Color.LightGray
+
             )
 
             Column(

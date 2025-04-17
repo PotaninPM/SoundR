@@ -5,6 +5,9 @@ import kotlinx.serialization.Serializable
 sealed class RootNavDestinations {
 
     @Serializable
+    data object Splash : RootNavDestinations()
+
+    @Serializable
     data object Home : RootNavDestinations()
 
     @Serializable

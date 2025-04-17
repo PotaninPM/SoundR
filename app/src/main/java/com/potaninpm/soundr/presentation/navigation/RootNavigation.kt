@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.potaninpm.soundr.presentation.screens.CalendarScreen
+import com.potaninpm.soundr.presentation.screens.CustomSplashScreen
 import com.potaninpm.soundr.presentation.screens.HomeScreen
 import com.potaninpm.soundr.presentation.screens.ProfileScreen
 import com.potaninpm.soundr.presentation.screens.TrainingScreen
