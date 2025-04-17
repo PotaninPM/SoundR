@@ -171,6 +171,9 @@ fun NotificationsInfo(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.background
         ),
+        onClick = {
+            onShowNotificationsChange(!showNotifications)
+        },
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
     ) {
         Column(
@@ -195,6 +198,7 @@ fun NotificationsInfo(
                 Icon(
                     painter = showNotificationsPainter,
                     contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .size(27.dp)
                         .clickable {
@@ -202,6 +206,7 @@ fun NotificationsInfo(
                         }
                 )
             }
+
             if (showNotifications) {
                 if (reminders.isEmpty()) {
                     Text(
