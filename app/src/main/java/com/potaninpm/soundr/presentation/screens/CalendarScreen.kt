@@ -4,56 +4,65 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.potaninpm.soundr.domain.model.TrainingInfo
 import com.potaninpm.soundr.presentation.components.CalendarView
+import com.potaninpm.soundr.presentation.components.TrainingView
+import com.potaninpm.soundr.presentation.viewModel.TrainingsViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun CalendarScreen() {
-    CalendarScreenContent()
+fun CalendarScreen(
+    viewModel: TrainingsViewModel = hiltViewModel(),
+) {
+    val trainingsByDate by viewModel.dayTrainings.collectAsState()
+
+    CalendarScreenContent(
+        trainingsByDate = trainingsByDate,
+        onDateSelected = { newDate ->
+            viewModel.loadTrainingsByDate(newDate)
+        }
+    )
 }
 
 @Composable
-private fun CalendarScreenContent() {
-    val scrollState = rememberScrollState()
-    var selectedDate by remember { mutableStateOf<LocalDate>(LocalDate.of(2021, 9, 2)) }
+private fun CalendarScreenContent(
+    trainingsByDate: List<TrainingInfo>,
+    onDateSelected: (LocalDate) -> Unit = {},
+) {
+    var selectedDate by remember { mutableStateOf<LocalDate>(LocalDate.now()) }
 
     Surface(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surface)
-            .padding(16.dp)
+            .verticalScroll(rememberScrollState()),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Top))
-                .scrollable(scrollState, orientation = Orientation.Vertical)
         ) {
             CalendarView(
                 onDateSelected = { date ->
+                    onDateSelected(date)
                     selectedDate = date
                 }
             )
@@ -63,31 +72,44 @@ private fun CalendarScreenContent() {
             )
 
             SelectedDayInfo(
-                date = selectedDate
+                date = selectedDate,
+                trainings = trainingsByDate
             )
         }
     }
 }
 
 @Composable
-private fun SelectedDayInfo(date: LocalDate) {
+private fun SelectedDayInfo(
+    date: LocalDate,
+    trainings: List<TrainingInfo>
+) {
     Column(
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
     ) {
         Text(
-            text = "Selected Date:",
-            style = MaterialTheme.typography.titleMedium
-        )
-        
-        Text(
-            text = date.format(DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy")),
+            text = "Выбрано: ${date.format(DateTimeFormatter.ofPattern("MMMM d, yyyy"))}",
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(top = 8.dp)
+            fontWeight = FontWeight.Bold,
         )
+
+        if (trainings.isNotEmpty()) {
+
+            trainings.forEach { training ->
+                TrainingView(training)
+            }
+        } else {
+            Text(
+                text = "Нет тренировок на этот день",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Normal,
+            )
+        }
     }
 }
 
-@Preview
+/*@Preview
 @Composable
 private fun CalendarScreenDarkPreview() {
     MaterialTheme(
@@ -105,5 +127,5 @@ private fun CalendarScreenLightPreview() {
     ) {
         CalendarScreenContent()
     }
-}
+}*/
 

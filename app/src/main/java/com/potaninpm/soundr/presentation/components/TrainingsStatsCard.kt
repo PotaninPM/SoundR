@@ -90,7 +90,7 @@ fun TrainingsStatsCard(
 
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
-                color = Color.LightGray
+
             )
 
             Column(
@@ -243,7 +243,7 @@ private fun DayWithNumber(
             modifier = Modifier
                 .size(36.dp)
                 .clip(CircleShape)
-                .background(if (isToday) MaterialTheme.colorScheme.primary else Color.Transparent),
+                .background(if (isToday) Color(17, 129, 217, 255) else Color.Transparent),
             contentAlignment = Alignment.Center
         ) {
             if (dayNumber.isNotEmpty()) {

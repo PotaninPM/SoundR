@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
@@ -117,13 +118,15 @@ fun DaysOfWeekHeader(
     ) {
         for (day in daysOfWeek) {
             Box(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = day,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.SemiBold
                 )
             }
         }
@@ -152,85 +155,92 @@ fun CalendarView(
 
     val maxLines = if (firstDayOffset >= 5 && currentMonth.lengthOfMonth() > 30) 6 else 5
 
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
+    Card(
+        modifier = Modifier
+            .padding(horizontal = 6.dp)
+            .background(MaterialTheme.colorScheme.surface),
     ) {
-        CalendarHeader(
-            currentMonth = currentMonth,
-            onPreviousClick = {
-                currentMonth = currentMonth.minusMonths(1)
-            },
-            onNextClick = {
-                currentMonth = currentMonth.plusMonths(1)
-            },
-            month = monthText,
-            year = yearText
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        DaysOfWeekHeader()
-
-        Spacer(modifier = Modifier.height(8.dp))
-
         Column(
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(vertical = 14.dp, horizontal = 8.dp)
         ) {
-            for (week in 0 until maxLines) {
-                Row(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    for (day in 0 until 7) {
-                        val currentDate = firstDateToShow.plusDays((week * 7 + day).toLong())
-                        val isCurrentMonth = currentDate.month == currentMonth.month
-                        val isSelected = currentDate.equals(selectedDate)
-                        val isToday = currentDate.equals(LocalDate.now())
+            DaysOfWeekHeader()
 
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .aspectRatio(1f)
-                                .padding(6.dp)
-                                .let {
-                                    if (isSelected) {
-                                        it.background(
-                                            color = MaterialTheme.colorScheme.primary,
-                                            shape = RoundedCornerShape(12.dp)
-                                        )
-                                    } else if (isToday) {
-                                        it.background(
-                                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-                                            shape = RoundedCornerShape(12.dp)
-                                        )
-                                    } else {
-                                        it
-                                    }
-                                },
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = currentDate.dayOfMonth.toString(),
-                                style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                                textAlign = TextAlign.Center,
-                                color = when {
-                                    isSelected -> MaterialTheme.colorScheme.surface
-                                    isCurrentMonth -> LocalContentColor.current
-                                    else -> Color.Gray.copy(alpha = 0.5f)
-                                },
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+            ) {
+                for (week in 0 until maxLines) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        for (day in 0 until 7) {
+                            val currentDate = firstDateToShow.plusDays((week * 7 + day).toLong())
+                            val isCurrentMonth = currentDate.month == currentMonth.month
+                            val isSelected = currentDate.equals(selectedDate)
+                            val isToday = currentDate.equals(LocalDate.now())
+
+                            Box(
                                 modifier = Modifier
-                                    .padding(8.dp)
-                                    .clickable(enabled = true) {
-                                        selectedDate = currentDate
-                                        onDateSelected(currentDate)
-                                    }
-                            )
+                                    .weight(1f)
+                                    .aspectRatio(1f)
+                                    .padding(6.dp)
+                                    .let {
+                                        if (isSelected) {
+                                            it.background(
+                                                color = MaterialTheme.colorScheme.primary,
+                                                shape = RoundedCornerShape(12.dp)
+                                            )
+                                        } else if (isToday) {
+                                            it.background(
+                                                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                                                shape = RoundedCornerShape(12.dp)
+                                            )
+                                        } else {
+                                            it
+                                        }
+                                    },
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = currentDate.dayOfMonth.toString(),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                                    textAlign = TextAlign.Center,
+                                    color = when {
+                                        isSelected -> MaterialTheme.colorScheme.surface
+                                        isCurrentMonth -> LocalContentColor.current
+                                        else -> Color.Gray.copy(alpha = 0.5f)
+                                    },
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .clickable(enabled = true) {
+                                            selectedDate = currentDate
+                                            onDateSelected(currentDate)
+                                        }
+                                )
+                            }
                         }
                     }
                 }
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            CalendarHeader(
+                currentMonth = currentMonth,
+                onPreviousClick = {
+                    currentMonth = currentMonth.minusMonths(1)
+                },
+                onNextClick = {
+                    currentMonth = currentMonth.plusMonths(1)
+                },
+                month = monthText,
+                year = yearText
+            )
         }
     }
 }

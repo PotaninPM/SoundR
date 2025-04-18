@@ -2,14 +2,17 @@ package com.potaninpm.soundr.presentation.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.potaninpm.soundr.data.local.entities.CompletedTraining
+import com.potaninpm.soundr.data.mappers.toTrainingInfo
 import com.potaninpm.soundr.domain.model.TrainingInfo
 import com.potaninpm.soundr.domain.repository.TrainingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -19,6 +22,9 @@ class TrainingsViewModel @Inject constructor(
     private val trainingsRepository: TrainingsRepository
 ) : ViewModel() {
 
+    private val _dayTrainings = MutableStateFlow<List<TrainingInfo>>(emptyList())
+    val dayTrainings: StateFlow<List<TrainingInfo>> = _dayTrainings.asStateFlow()
+
     private val _todayTrainings = MutableStateFlow<List<TrainingInfo>>(emptyList())
     val todayTrainings: StateFlow<List<TrainingInfo>> = _todayTrainings.asStateFlow()
 
@@ -26,26 +32,44 @@ class TrainingsViewModel @Inject constructor(
         loadTodayTrainings()
     }
 
-    private fun loadTodayTrainings() {
+    val totalCompletedExercises: StateFlow<Long> = trainingsRepository
+        .getAllTrainings()
+        .map {
+            it.size.toLong()
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = 0
+        )
+
+    val totalTime: StateFlow<Long> = trainingsRepository
+        .getAllTrainings()
+        .map { trainings ->
+            trainings.sumOf {
+                it.duration / 1000 / 60
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = 0
+        )
+
+    fun loadTrainingsByDate(date: LocalDate) {
         viewModelScope.launch {
-            val today = LocalDate.now()
-            
-            trainingsRepository.getTrainingsByDate(today).collectLatest { completedTrainings ->
-                _todayTrainings.value = completedTrainings.map { it.toTrainingInfo() }
+            trainingsRepository.getTrainingsByDate(date).collectLatest { completedTrainings ->
+                _dayTrainings.value = completedTrainings.map { it.toTrainingInfo() }
             }
         }
     }
 
-    private fun CompletedTraining.toTrainingInfo(): TrainingInfo {
-        return TrainingInfo(
-            id = this.id.toInt(),
-            date = this.date,
-            progress = (this.progress * 100).toInt(),
-            timeStart = this.startTime,
-            timeEnd = this.endTime,
-            duration = this.duration,
-            allExercisesId = this.allExercisesId.map { it.toInt() },
-            madeExercisesId = this.madeExercisesId.map { it.toInt() }
-        )
+    private fun loadTodayTrainings() {
+        viewModelScope.launch {
+            trainingsRepository.getTrainingsByDate(LocalDate.now()).collectLatest { completedTrainings ->
+                _todayTrainings.value = completedTrainings.map { it.toTrainingInfo() }
+                _dayTrainings.value = completedTrainings.map { it.toTrainingInfo() }
+            }
+        }
     }
 } 

@@ -43,7 +43,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.potaninpm.soundr.domain.model.TrainingInfo
 import com.potaninpm.soundr.domain.model.UserInfo
 import com.potaninpm.soundr.presentation.components.NotificationsInfo
 import com.potaninpm.soundr.presentation.components.TodayInfoCard
@@ -56,7 +55,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    navController: NavController
+    navController: NavController,
+    faceDown: Boolean
 ) {
     val scope = rememberCoroutineScope()
     var selectedTab by remember { mutableIntStateOf(0) }
@@ -64,13 +64,13 @@ fun HomeScreen(
         pageCount = { 3 }
     )
 
-    val trainings = emptyList<TrainingInfo>()
-
     val allHeaders = listOf(
         "Home",
         "Calendar",
         "Profile"
     )
+
+
 
     LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.currentPage }
@@ -130,14 +130,14 @@ fun HomeScreen(
         ) { page ->
             when (page) {
                 0 -> HomeScreenContent(
-                    trainings = trainings,
                     navController = navController,
                     onCardClick = {
                         selectedTab = 1
                         scope.launch {
                             pagerState.animateScrollToPage(selectedTab)
                         }
-                    }
+                    },
+                    faceDown = faceDown
                 )
                 1 -> CalendarScreen()
                 2 -> ProfileScreen()
@@ -149,21 +149,48 @@ fun HomeScreen(
 @Composable
 private fun HomeScreenContent(
     navController: NavController,
-    trainings: List<TrainingInfo>,
     onCardClick: () -> Unit = {},
+    faceDown: Boolean,
     notificationViewModel: NotificationViewModel = hiltViewModel(),
     trainingsViewModel: TrainingsViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
 
-    val sharedPrefs = context.getSharedPreferences("soundr", Context.MODE_PRIVATE)
+    val prefs = remember { context.getSharedPreferences("soundr", Context.MODE_PRIVATE) }
 
     var showNotifications by remember {
-        mutableStateOf(sharedPrefs.getBoolean("show_notifications", true))
+        mutableStateOf(prefs.getBoolean("show_notifications", true))
     }
+
+    var showTrainings by remember {
+        mutableStateOf(prefs.getBoolean("show_trainings", true))
+    }
+
+    var wasFaceDown by remember { mutableStateOf(false) }
+
+    LaunchedEffect(faceDown) {
+        if (faceDown) {
+            wasFaceDown = true
+        } else if (wasFaceDown) {
+            showNotifications = !showNotifications
+            showTrainings = !showTrainings
+
+            prefs.edit()
+                .putBoolean("show_notifications", showNotifications)
+                .putBoolean("show_trainings", showTrainings)
+                .apply()
+
+            wasFaceDown = false
+        }
+    }
+
+    val totalTrainingsTime by trainingsViewModel.totalTime.collectAsState()
+    val totalCompletedExercises by trainingsViewModel.totalCompletedExercises.collectAsState()
 
     val reminders by notificationViewModel.reminders.collectAsState()
     val todayTrainings by trainingsViewModel.todayTrainings.collectAsState()
+
+    val totalProgress = totalCompletedExercises / 90.0f
 
     Column(
         modifier = Modifier
@@ -174,11 +201,11 @@ private fun HomeScreenContent(
         TrainingsStatsCard(
             userInfo = UserInfo(
                 name = "John Doe",
-                streak = 5,
-                bestStreak = 10,
-                totalTrainings = 20,
-                totalTrainingsTime = 300,
-                progress = 0.75f
+                streak = -1,
+                bestStreak = -1,
+                totalTrainings = totalCompletedExercises,
+                totalTrainingsTime = totalTrainingsTime,
+                progress = totalProgress
             ),
             onClick = {
                 onCardClick()
@@ -191,6 +218,11 @@ private fun HomeScreenContent(
             trainings = todayTrainings,
             onStartTrainingClick = {
                 navController.navigate(RootNavDestinations.Training)
+            },
+            showTrainings = showTrainings,
+            onShowTrainingsChange = { newValue ->
+                prefs.edit().putBoolean("show_trainings", newValue).apply()
+                showTrainings = newValue
             }
         )
 
@@ -209,7 +241,7 @@ private fun HomeScreenContent(
             },
             showNotifications = showNotifications,
             onShowNotificationsChange = { newValue ->
-                sharedPrefs.edit().putBoolean("show_notifications", newValue).apply()
+                prefs.edit().putBoolean("show_notifications", newValue).apply()
                 showNotifications = newValue
             }
         )

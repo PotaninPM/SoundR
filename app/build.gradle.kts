@@ -52,6 +52,9 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.androidx.hilt.navigation.compose)
 
+    // lottie
+    implementation(libs.lottie.compose)
+
     // Room
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.runtime)
