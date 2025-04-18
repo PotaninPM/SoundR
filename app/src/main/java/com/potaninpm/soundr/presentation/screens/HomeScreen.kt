@@ -1,7 +1,6 @@
 package com.potaninpm.soundr.presentation.screens
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -157,8 +156,6 @@ private fun HomeScreenContent(
 ) {
     val context = LocalContext.current
 
-    var counter by remember { mutableIntStateOf(0) }
-
     val prefs = remember { context.getSharedPreferences("soundr", Context.MODE_PRIVATE) }
 
     var showNotifications by remember {
@@ -187,8 +184,13 @@ private fun HomeScreenContent(
         }
     }
 
+    val totalTrainingsTime by trainingsViewModel.totalTime.collectAsState()
+    val totalCompletedExercises by trainingsViewModel.totalCompletedExercises.collectAsState()
+
     val reminders by notificationViewModel.reminders.collectAsState()
     val todayTrainings by trainingsViewModel.todayTrainings.collectAsState()
+
+    val totalProgress = totalCompletedExercises / 90.0f
 
     Column(
         modifier = Modifier
@@ -199,11 +201,11 @@ private fun HomeScreenContent(
         TrainingsStatsCard(
             userInfo = UserInfo(
                 name = "John Doe",
-                streak = 5,
-                bestStreak = 10,
-                totalTrainings = 20,
-                totalTrainingsTime = 300,
-                progress = 0.75f
+                streak = -1,
+                bestStreak = -1,
+                totalTrainings = totalCompletedExercises,
+                totalTrainingsTime = totalTrainingsTime,
+                progress = totalProgress
             ),
             onClick = {
                 onCardClick()

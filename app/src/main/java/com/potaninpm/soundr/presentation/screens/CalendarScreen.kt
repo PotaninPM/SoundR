@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.potaninpm.soundr.domain.model.TrainingInfo
 import com.potaninpm.soundr.presentation.components.CalendarView
+import com.potaninpm.soundr.presentation.components.TrainingView
 import com.potaninpm.soundr.presentation.viewModel.TrainingsViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -46,18 +48,17 @@ private fun CalendarScreenContent(
     trainingsByDate: List<TrainingInfo>,
     onDateSelected: (LocalDate) -> Unit = {},
 ) {
-    val scrollState = rememberScrollState()
     var selectedDate by remember { mutableStateOf<LocalDate>(LocalDate.now()) }
 
     Surface(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surface)
+            .verticalScroll(rememberScrollState()),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .scrollable(scrollState, orientation = Orientation.Vertical)
         ) {
             CalendarView(
                 onDateSelected = { date ->
@@ -96,11 +97,7 @@ private fun SelectedDayInfo(
         if (trainings.isNotEmpty()) {
 
             trainings.forEach { training ->
-                Text(
-                    text = training.id.toString(),
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Bold,
-                )
+                TrainingView(training)
             }
         } else {
             Text(

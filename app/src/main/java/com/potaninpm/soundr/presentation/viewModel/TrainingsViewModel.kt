@@ -7,9 +7,12 @@ import com.potaninpm.soundr.domain.model.TrainingInfo
 import com.potaninpm.soundr.domain.repository.TrainingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -29,6 +32,30 @@ class TrainingsViewModel @Inject constructor(
         loadTodayTrainings()
     }
 
+    val totalCompletedExercises: StateFlow<Long> = trainingsRepository
+        .getAllTrainings()
+        .map {
+            it.size.toLong()
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = 0
+        )
+
+    val totalTime: StateFlow<Long> = trainingsRepository
+        .getAllTrainings()
+        .map { trainings ->
+            trainings.sumOf {
+                it.duration / 1000 / 60
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = 0
+        )
+
     fun loadTrainingsByDate(date: LocalDate) {
         viewModelScope.launch {
             trainingsRepository.getTrainingsByDate(date).collectLatest { completedTrainings ->
@@ -37,7 +64,7 @@ class TrainingsViewModel @Inject constructor(
         }
     }
 
-    fun loadTodayTrainings() {
+    private fun loadTodayTrainings() {
         viewModelScope.launch {
             trainingsRepository.getTrainingsByDate(LocalDate.now()).collectLatest { completedTrainings ->
                 _todayTrainings.value = completedTrainings.map { it.toTrainingInfo() }
