@@ -190,7 +190,7 @@ private fun HomeScreenContent(
     val reminders by notificationViewModel.reminders.collectAsState()
     val todayTrainings by trainingsViewModel.todayTrainings.collectAsState()
 
-    val totalProgress = totalCompletedExercises / 90.0f
+    val totalProgress = totalCompletedExercises / 100.0f
 
     Column(
         modifier = Modifier
