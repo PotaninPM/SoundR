@@ -48,6 +48,7 @@ fun ProfileScreen(
 
     val totalProgress = totalCompletedExercises / 100.0f
 
+
     ProfileScreenContent(
         totalTrainingsTime = totalTrainingsTime,
         totalCompletedExercises = totalCompletedExercises,
