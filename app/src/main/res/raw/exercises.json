@@ -2,22 +2,141 @@
   {
     "id": "0",
     "name": "Приседания",
-    "description": "Как выполнять:\n1. Встаньте, расставив ноги на ширине плеч\n2. Опуститесь, сгибая колени, как будто садитесь на стул\n3. Следите, чтобы колени не выходили за линию носков\n4. Вернитесь в исходное положение\n\nВыполните 3 подхода по 15 повторений.",
+    "description": "Как выполнять:\n1. ",
     "videoId": "video1",
     "timesToDo": 3
   },
   {
     "id": "1",
     "name": "Отжимания",
-    "description": "Как выполнять:\n1. Примите положение планки, руки на ширине плеч\n2. Держа тело прямым, опуститесь, сгибая локти\n3. Задержитесь на секунду в нижнем положении\n4. Вернитесь в исходное положение\n\nВыполните 3 подхода по 10 повторений.",
-    "videoId": "video1",
+    "description": "Как выполнять:\n1. ",
+    "videoId": "video2",
     "timesToDo": 5
   },
   {
     "id": "2",
     "name": "Планка",
-    "description": "Как выполнять:\n1. Примите положение, опираясь на предплечья и носки\n2. Держите тело прямым, напрягите мышцы живота\n3. Следите, чтобы бедра не опускались и не поднимались\n4. Дышите равномерно\n\nУдерживайте позицию 30-60 секунд, 3 подхода.",
-    "videoId": "video1",
+    "description": "Как выполнять:\n1. ",
+    "videoId": "video3",
+    "timesToDo": 6
+  },
+  {
+    "id": "3",
+    "name": "Планка",
+    "description": "Как выполнять:\n1. ",
+    "videoId": "video4",
+    "timesToDo": 6
+  },
+  {
+    "id": "4",
+    "name": "Планка",
+    "description": "Как выполнять:\n1. ",
+    "videoId": "video5",
+    "timesToDo": 6
+  },
+  {
+    "id": "5",
+    "name": "Планка",
+    "description": "Как выполнять:\n1. ",
+    "videoId": "video6",
+    "timesToDo": 6
+  },
+  {
+    "id": "6",
+    "name": "Планка",
+    "description": "Как выполнять:\n1. ",
+    "videoId": "video7",
+    "timesToDo": 6
+  },
+  {
+    "id": "7",
+    "name": "Планка",
+    "description": "Как выполнять:\n1. ",
+    "videoId": "video8",
+    "timesToDo": 6
+  },
+  {
+    "id": "8",
+    "name": "Планка",
+    "description": "Как выполнять:\n1. ",
+    "videoId": "video9",
+    "timesToDo": 6
+  },
+  {
+    "id": "9",
+    "name": "Планка",
+    "description": "Как выполнять:\n1. ",
+    "videoId": "video10",
+    "timesToDo": 6
+  },
+  {
+    "id": "10",
+    "name": "Планка",
+    "description": "Как выполнять:\n1. ",
+    "videoId": "video11",
+    "timesToDo": 6
+  },
+  {
+    "id": "11",
+    "name": "Планка",
+    "description": "Как выполнять:\n1. ",
+    "videoId": "video12",
+    "timesToDo": 6
+  },
+  {
+    "id": "12",
+    "name": "Планка",
+    "description": "Как выполнять:\n1. ",
+    "videoId": "video13",
+    "timesToDo": 6
+  },
+  {
+    "id": "13",
+    "name": "Планка",
+    "description": "Как выполнять:\n1. ",
+    "videoId": "video14",
+    "timesToDo": 6
+  },
+  {
+    "id": "14",
+    "name": "Планка",
+    "description": "Как выполнять:\n1. ",
+    "videoId": "video15",
+    "timesToDo": 6
+  },
+  {
+    "id": "15",
+    "name": "Планка",
+    "description": "Как выполнять:\n1. ",
+    "videoId": "video16",
+    "timesToDo": 6
+  },
+  {
+    "id": "16",
+    "name": "Планка",
+    "description": "Как выполнять:\n1. ",
+    "videoId": "video17",
+    "timesToDo": 6
+  },
+  {
+    "id": "17",
+    "name": "Планка",
+    "description": "Как выполнять:\n1. ",
+    "videoId": "video18",
+    "timesToDo": 6
+  },
+  {
+    "id": "18",
+    "name": "Планка",
+    "description": "Как выполнять:\n1. ",
+    "videoId": "video19",
+    "timesToDo": 6
+  },
+  {
+    "id": "19",
+    "name": "Планка",
+    "description": "Как выполнять:\n1. ",
+    "videoId": "video20",
     "timesToDo": 6
   }
 ]
