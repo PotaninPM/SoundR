@@ -43,7 +43,7 @@ fun TrainingView(
 
     val durationMinutes = Duration.ofMillis(training.duration).toMinutes()
     
-    Card(
+   /* Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
@@ -51,7 +51,7 @@ fun TrainingView(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f)
         )
-    ) {
+    ) {*/
         Row(
             modifier = Modifier
                 .padding(vertical = 16.dp, horizontal = 14.dp),
@@ -86,7 +86,7 @@ fun TrainingView(
                 DoneTrainingsInfo(training)
             }
         }
-    }
+    //}
 }
 
 @Composable

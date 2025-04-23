@@ -98,7 +98,7 @@ fun TodayInfoCard(
                         .size(27.dp)
                         .clickable {
                             onShowTrainingsChange(!showTrainings)
-                        },
+                        }
                 )
             }
 
@@ -107,7 +107,17 @@ fun TodayInfoCard(
                     Spacer(modifier = Modifier.padding(4.dp))
 
                     trainings.forEach { training ->
-                        TrainingView(training = training)
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f)
+                            )
+                        ) {
+                            TrainingView(training = training)
+                        }
                     }
                 } else {
                     Box(
