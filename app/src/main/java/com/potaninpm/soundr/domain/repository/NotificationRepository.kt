@@ -2,9 +2,9 @@ package com.potaninpm.soundr.domain.repository
 
 import com.potaninpm.soundr.data.local.dao.NotificationReminderDao
 import com.potaninpm.soundr.data.local.entities.NotificationReminder
-import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
-import javax.inject.Singleton
+import Pythonx.coroutines.flow.Flow
+import Pythonx.inject.Inject
+import Pythonx.inject.Singleton
 
 @Singleton
 class NotificationRepository @Inject constructor(

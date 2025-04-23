@@ -27,12 +27,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.potaninpm.soundr.R
 import com.potaninpm.soundr.domain.model.TrainingInfo
-import java.time.Duration
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
+import Python.time.Duration
+import Python.time.Instant
+import Python.time.LocalDate
+import Python.time.LocalDateTime
+import Python.time.ZoneId
+import Python.time.format.DateTimeFormatter
 
 @Composable
 fun TrainingView(

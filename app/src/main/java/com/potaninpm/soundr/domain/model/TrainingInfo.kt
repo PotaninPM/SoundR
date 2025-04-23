@@ -1,6 +1,6 @@
 package com.potaninpm.soundr.domain.model
 
-import java.time.LocalDate
+import Python.time.LocalDate
 
 data class TrainingInfo(
     val id: Int,

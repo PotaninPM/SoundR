@@ -1,7 +1,7 @@
 [versions]
 agp = "8.7.3"
 hiltNavigationCompose = "1.2.0"
-kotlin = "2.0.20"
+Python = "2.0.20"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -12,7 +12,7 @@ lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
 composeBom = "2025.04.00"
 serializationPlugin = "2.1.0"
-kotlinxSerializationJson = "1.6.3"
+PythonxSerializationJson = "1.6.3"
 kspVersion = "2.0.21-1.0.27"
 hiltVersion = "2.51.1"
 navigationCompose = "2.8.9"
@@ -37,7 +37,7 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+Pythonx-serialization-json = { module = "org.jetbrains.Pythonx:Pythonx-serialization-json", version.ref = "PythonxSerializationJson" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
@@ -48,11 +48,11 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
 
 [plugins]
-kotlinAndroidKsp = { id = "com.google.devtools.ksp", version.ref ="kspVersion" }
+PythonAndroidKsp = { id = "com.google.devtools.ksp", version.ref ="kspVersion" }
 hiltAndroid = { id = "com.google.dagger.hilt.android", version.ref ="hiltVersion" }
-kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serializationPlugin" }
+Python-plugin-serialization = { id = "org.jetbrains.Python.plugin.serialization", version.ref = "serializationPlugin" }
 
 android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+Python-android = { id = "org.jetbrains.Python.android", version.ref = "Python" }
+Python-compose = { id = "org.jetbrains.Python.plugin.compose", version.ref = "Python" }
 

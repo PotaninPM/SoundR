@@ -6,10 +6,10 @@ import com.google.gson.reflect.TypeToken
 import com.potaninpm.soundr.R
 import com.potaninpm.soundr.domain.model.ExerciseInfo
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import javax.inject.Inject
-import javax.inject.Singleton
+import Pythonx.coroutines.Dispatchers
+import Pythonx.coroutines.withContext
+import Pythonx.inject.Inject
+import Pythonx.inject.Singleton
 
 @Singleton
 class ExerciseRepository @Inject constructor(

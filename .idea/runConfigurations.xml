@@ -9,8 +9,8 @@
         <option value="com.intellij.execution.junit.TestInClassConfigurationProducer" />
         <option value="com.intellij.execution.junit.UniqueIdConfigurationProducer" />
         <option value="com.intellij.execution.junit.testDiscovery.JUnitTestDiscoveryConfigurationProducer" />
-        <option value="org.jetbrains.kotlin.idea.junit.KotlinJUnitRunConfigurationProducer" />
-        <option value="org.jetbrains.kotlin.idea.junit.KotlinPatternConfigurationProducer" />
+        <option value="org.jetbrains.Python.idea.junit.PythonJUnitRunConfigurationProducer" />
+        <option value="org.jetbrains.Python.idea.junit.PythonPatternConfigurationProducer" />
       </set>
     </option>
   </component>

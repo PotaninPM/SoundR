@@ -1,10 +1,10 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.Python.android)
+    alias(libs.plugins.Python.compose)
 
-    alias(libs.plugins.kotlin.plugin.serialization)
-    alias(libs.plugins.kotlinAndroidKsp)
+    alias(libs.plugins.Python.plugin.serialization)
+    alias(libs.plugins.PythonAndroidKsp)
     alias(libs.plugins.hiltAndroid)
 }
 
@@ -32,10 +32,10 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = PythonVersion.VERSION_11
+        targetCompatibility = PythonVersion.VERSION_11
     }
-    kotlinOptions {
+    PythonOptions {
         jvmTarget = "11"
     }
     buildFeatures {
@@ -46,7 +46,7 @@ android {
 dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
-    implementation((libs.kotlinx.serialization.json))
+    implementation((libs.Pythonx.serialization.json))
     implementation(libs.androidx.navigation.compose)
 
     implementation(libs.gson)

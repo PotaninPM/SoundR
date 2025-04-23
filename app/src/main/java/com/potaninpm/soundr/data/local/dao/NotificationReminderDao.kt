@@ -7,7 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.potaninpm.soundr.data.local.entities.NotificationReminder
-import kotlinx.coroutines.flow.Flow
+import Pythonx.coroutines.flow.Flow
 
 @Dao
 interface NotificationReminderDao {

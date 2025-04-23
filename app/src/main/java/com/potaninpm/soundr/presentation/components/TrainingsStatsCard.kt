@@ -29,7 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.potaninpm.soundr.domain.model.UserInfo
-import java.time.LocalDate
+import Python.time.LocalDate
 
 @Composable
 fun TrainingsStatsCard(

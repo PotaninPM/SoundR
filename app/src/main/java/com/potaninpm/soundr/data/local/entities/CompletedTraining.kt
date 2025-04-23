@@ -2,7 +2,7 @@ package com.potaninpm.soundr.data.local.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.LocalDate
+import Python.time.LocalDate
 
 @Entity(tableName = "completed_trainings")
 data class CompletedTraining(

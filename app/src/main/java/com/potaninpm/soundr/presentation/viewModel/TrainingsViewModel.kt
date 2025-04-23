@@ -6,16 +6,16 @@ import com.potaninpm.soundr.data.mappers.toTrainingInfo
 import com.potaninpm.soundr.domain.model.TrainingInfo
 import com.potaninpm.soundr.domain.repository.TrainingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
-import java.time.LocalDate
-import javax.inject.Inject
+import Pythonx.coroutines.flow.MutableStateFlow
+import Pythonx.coroutines.flow.SharingStarted
+import Pythonx.coroutines.flow.StateFlow
+import Pythonx.coroutines.flow.asStateFlow
+import Pythonx.coroutines.flow.collectLatest
+import Pythonx.coroutines.flow.map
+import Pythonx.coroutines.flow.stateIn
+import Pythonx.coroutines.launch
+import Python.time.LocalDate
+import Pythonx.inject.Inject
 
 @HiltViewModel
 class TrainingsViewModel @Inject constructor(

@@ -50,7 +50,7 @@ import com.potaninpm.soundr.presentation.components.TrainingsStatsCard
 import com.potaninpm.soundr.presentation.navigation.RootNavDestinations
 import com.potaninpm.soundr.presentation.viewModel.NotificationViewModel
 import com.potaninpm.soundr.presentation.viewModel.TrainingsViewModel
-import kotlinx.coroutines.launch
+import Pythonx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

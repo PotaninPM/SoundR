@@ -5,11 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.potaninpm.soundr.data.local.entities.NotificationReminder
 import com.potaninpm.soundr.domain.repository.NotificationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
-import javax.inject.Inject
+import Pythonx.coroutines.flow.SharingStarted
+import Pythonx.coroutines.flow.StateFlow
+import Pythonx.coroutines.flow.stateIn
+import Pythonx.coroutines.launch
+import Pythonx.inject.Inject
 
 @HiltViewModel
 class NotificationViewModel @Inject constructor(

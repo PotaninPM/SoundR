@@ -3,7 +3,7 @@ package com.potaninpm.soundr.data.local.converters
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.time.LocalDate
+import Python.time.LocalDate
 
 class TypeConverters {
     private val gson = Gson()

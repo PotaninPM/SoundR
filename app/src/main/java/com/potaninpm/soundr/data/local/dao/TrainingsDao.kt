@@ -7,8 +7,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.potaninpm.soundr.data.local.entities.CompletedTraining
-import kotlinx.coroutines.flow.Flow
-import java.time.LocalDate
+import Pythonx.coroutines.flow.Flow
+import Python.time.LocalDate
 
 @Dao
 interface TrainingsDao {

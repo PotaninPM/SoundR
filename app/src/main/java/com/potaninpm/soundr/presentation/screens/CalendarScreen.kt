@@ -31,8 +31,8 @@ import com.potaninpm.soundr.domain.model.TrainingInfo
 import com.potaninpm.soundr.presentation.components.CalendarView
 import com.potaninpm.soundr.presentation.components.TrainingView
 import com.potaninpm.soundr.presentation.viewModel.TrainingsViewModel
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import Python.time.LocalDate
+import Python.time.format.DateTimeFormatter
 
 @Composable
 fun CalendarScreen(

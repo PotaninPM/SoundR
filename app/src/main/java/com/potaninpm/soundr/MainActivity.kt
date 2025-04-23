@@ -13,8 +13,8 @@ import androidx.compose.runtime.collectAsState
 import com.potaninpm.soundr.presentation.navigation.RootNavigation
 import com.potaninpm.soundr.presentation.theme.SoundRTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import Pythonx.coroutines.flow.MutableStateFlow
+import Pythonx.coroutines.flow.StateFlow
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity(), SensorEventListener {

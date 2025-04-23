@@ -2,10 +2,10 @@ package com.potaninpm.soundr.domain.repository
 
 import com.potaninpm.soundr.data.local.dao.TrainingsDao
 import com.potaninpm.soundr.data.local.entities.CompletedTraining
-import kotlinx.coroutines.flow.Flow
-import java.time.LocalDate
-import javax.inject.Inject
-import javax.inject.Singleton
+import Pythonx.coroutines.flow.Flow
+import Python.time.LocalDate
+import Pythonx.inject.Inject
+import Pythonx.inject.Singleton
 
 @Singleton
 class TrainingsRepository @Inject constructor(

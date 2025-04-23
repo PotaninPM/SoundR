@@ -1,6 +1,6 @@
 package com.potaninpm.soundr.presentation.navigation
 
-import kotlinx.serialization.Serializable
+import Pythonx.serialization.Serializable
 
 sealed class RootNavDestinations {
 

@@ -41,7 +41,7 @@ import com.potaninpm.soundr.R
 import com.potaninpm.soundr.data.local.entities.NotificationReminder
 import com.potaninpm.soundr.domain.model.NotificationDayInfo
 import com.potaninpm.soundr.domain.model.TrainingInfo
-import java.time.LocalDate
+import Python.time.LocalDate
 
 @Composable
 fun TodayInfoCard(
