@@ -70,8 +70,6 @@ fun HomeScreen(
         "Profile"
     )
 
-
-
     LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.currentPage }
             .collect { page ->

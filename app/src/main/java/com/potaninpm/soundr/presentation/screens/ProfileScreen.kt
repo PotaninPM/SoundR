@@ -1,8 +1,18 @@
 package com.potaninpm.soundr.presentation.screens
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,45 +24,65 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.VerticalDivider
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import coil3.compose.rememberAsyncImagePainter
 import com.potaninpm.soundr.presentation.components.UpperStatsPart
+import com.potaninpm.soundr.presentation.viewModel.ProfileViewModel
 import com.potaninpm.soundr.presentation.viewModel.TrainingsViewModel
 
 @Composable
 fun ProfileScreen(
     trainingsViewModel: TrainingsViewModel = hiltViewModel(),
+    profileViewModel: ProfileViewModel = hiltViewModel(),
 ) {
     val totalTrainingsTime by trainingsViewModel.totalTime.collectAsState()
     val totalCompletedExercises by trainingsViewModel.totalCompletedExercises.collectAsState()
+    val userName by profileViewModel.userName.collectAsState()
+    val hasProfileImage by profileViewModel.hasProfileImage.collectAsState()
 
     val totalProgress = totalCompletedExercises / 100.0f
-
 
     ProfileScreenContent(
         totalTrainingsTime = totalTrainingsTime,
         totalCompletedExercises = totalCompletedExercises,
-        totalProgress = totalProgress
+        totalProgress = totalProgress,
+        userName = userName,
+        hasProfileImage = hasProfileImage,
+        profileViewModel = profileViewModel
     )
 }
 
@@ -60,8 +90,29 @@ fun ProfileScreen(
 private fun ProfileScreenContent(
     totalTrainingsTime: Long,
     totalCompletedExercises: Long,
-    totalProgress: Float
+    totalProgress: Float,
+    userName: String,
+    hasProfileImage: Boolean,
+    profileViewModel: ProfileViewModel
 ) {
+    val bitmap = remember { mutableStateOf<Bitmap?>(null) }
+
+    if (hasProfileImage && bitmap.value == null) {
+        bitmap.value = profileViewModel.getProfileImageBitmap()
+    }
+
+    var avatarUri by rememberSaveable { mutableStateOf<Uri?>(null) }
+
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) {
+        uri: Uri? -> avatarUri = uri
+    }
+
+    val onImageClick: () -> Unit = {
+        imagePickerLauncher.launch("image/*")
+    }
+
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -74,13 +125,16 @@ private fun ProfileScreenContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             UserImage(
-                image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ29ppdzqXN6nP-msl1kg7C0Ry-YgR49gnMEQ&s",
+                bitmap = bitmap.value,
+                onClick = {
+                    onImageClick()
+                }
             )
 
             Spacer(modifier = Modifier.size(16.dp))
 
             UserStats(
-                name = "John Doe",
+                name = userName,
                 totalTrainings = totalCompletedExercises,
                 totalTrainingsTime = totalTrainingsTime,
                 progress = totalProgress
@@ -157,7 +211,8 @@ fun UserStats(
 
 @Composable
 fun UserImage(
-    image: String
+    bitmap: Bitmap?,
+    onClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -167,15 +222,31 @@ fun UserImage(
                 width = 4.dp,
                 color = Color(0xFF4CAF50),
                 shape = CircleShape
-            ),
+            )
+            .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
-        Image(
-            painter = rememberAsyncImagePainter(image),
-            contentDescription = null,
-            modifier = Modifier
-                .size(110.dp)
-                .clip(CircleShape),
-        )
+        bitmap?.let {
+            Image(
+                bitmap = it.asImageBitmap(),
+                contentDescription = "Profile picture",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
+        } ?: run {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Add profile picture",
+                    modifier = Modifier.size(40.dp)
+                )
+            }
+        }
     }
 }
