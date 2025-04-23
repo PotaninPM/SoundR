@@ -48,7 +48,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.potaninpm.soundr.R
 import com.potaninpm.soundr.domain.model.ExerciseInfo
 import com.potaninpm.soundr.presentation.navigation.RootNavDestinations
 import com.potaninpm.soundr.presentation.viewModel.TrainingViewModel
@@ -98,7 +97,6 @@ fun TrainingScreen(
                     onSkipClick = { viewModel.skipExercise() },
                     exerciseIndex = uiState.exercises.indexOfFirst { it.id == uiState.currentExercise?.id },
                     totalExercises = uiState.exercises.size,
-                    videoResId = R.raw.video1
                 )
             }
         }
@@ -181,7 +179,7 @@ fun TrainingVideo(
 ) {
     val context = LocalContext.current
 
-    val videoView = remember {
+    val videoView = remember(videoId) {
         VideoView(context).apply {
             val videoUri = Uri.parse("android.resource://${context.packageName}/$videoId")
             setVideoURI(videoUri)
@@ -204,14 +202,22 @@ fun TrainingVideo(
         factory = {
             videoView
         },
-        modifier = modifier
+        modifier = modifier,
+        update = { view ->
+            if (view.tag != videoId) {
+                view.stopPlayback()
+                val videoUri = Uri.parse("android.resource://${context.packageName}/$videoId")
+                view.setVideoURI(videoUri)
+                view.start()
+                view.tag = videoId
+            }
+        }
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TrainingScreenContent(
-    videoResId: Int,
     exercise: ExerciseInfo?,
     onNextClick: () -> Unit,
     onPrevClick: () -> Unit,
@@ -219,18 +225,15 @@ private fun TrainingScreenContent(
     exerciseIndex: Int,
     totalExercises: Int
 ) {
+    val context = LocalContext.current
+
     if (exercise == null) return
 
-    // Состояние для BottomSheetScaffold
     val sheetState = rememberStandardBottomSheetState(
-        initialValue = SheetValue.Expanded // свёрнуто по умолчанию
+        initialValue = SheetValue.Expanded
     )
     val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = sheetState)
 
-    // Определяем динамическую высоту видео в зависимости от прогресса bottom sheet:
-    // Если лист свёрнут (Collapsed) – видео занимает больше места,
-    // Если развёрнут (Expanded) – видео занимает меньше места.
-    // Здесь просто выбираем два фиксированных значения для примера.
     val expandedVideoHeight = 300.dp
     val collapsedVideoHeight = 450.dp
 
@@ -246,11 +249,9 @@ private fun TrainingScreenContent(
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
-        sheetPeekHeight = 80.dp,  // минимальная высота нижнего листа (например, оставляет кнопки видимыми)
+        sheetPeekHeight = 80.dp,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         sheetContent = {
-            // Здесь располагаем информацию, которая показывается в BottomSheet при развёрнутом состоянии.
-            // Если лист свёрнут, можно показывать только подсказку или кнопки.
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -292,7 +293,6 @@ private fun TrainingScreenContent(
                         }
                     }
                 } else {
-                    // При свёрнутом состоянии отображаем подсказку
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -326,23 +326,24 @@ private fun TrainingScreenContent(
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Информационный заголовок (опционально)
+
                 Text(
                     text = "Exercise ${exerciseIndex + 1} of $totalExercises",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                // Видео. Его высота меняется в зависимости от состояния BottomSheet.
+
                 TrainingVideo(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(videoHeight)
                         .clip(RoundedCornerShape(16.dp)),
-                    videoId = videoResId
+                    videoId = context.resources.getIdentifier(exercise.videoId, "raw", context.packageName)
                 )
+
                 Spacer(modifier = Modifier.height(16.dp))
-                // Кнопки управления. Они всегда видны под видео.
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -366,52 +367,4 @@ private fun TrainingScreenContent(
         }
     )
 }
-
-/*
-@Preview
-@Composable
-private fun TrainingScreenDarkPreview() {
-    MaterialTheme(
-        colorScheme = darkColorScheme()
-    ) {
-        TrainingScreenContent(
-            exercise = ExerciseInfo(
-                id = 1,
-                name = "Приседания",
-                description = "Приседания – базовое упражнение...",
-                videoId = "video1",
-                timesToDo = 3
-            ),
-            onNextClick = {},
-            onPrevClick = {},
-            onSkipClick = {},
-            exerciseIndex = 0,
-            totalExercises = 3
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun TrainingScreenLightPreview() {
-    MaterialTheme(
-        colorScheme = lightColorScheme()
-    ) {
-        TrainingScreenContent(
-            exercise = ExerciseInfo(
-                id = 1,
-                name = "Приседания",
-                description = "Приседания – базовое упражнение...",
-                videoId = "video1",
-                timesToDo = 3
-            ),
-            onNextClick = {},
-            onPrevClick = {},
-            onSkipClick = {},
-            exerciseIndex = 0,
-            totalExercises = 3
-        )
-    }
-}
-*/
 
