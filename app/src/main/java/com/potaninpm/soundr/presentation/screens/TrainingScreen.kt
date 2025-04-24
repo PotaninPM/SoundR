@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -24,6 +25,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -43,12 +46,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.potaninpm.soundr.R
 import com.potaninpm.soundr.domain.model.ExerciseInfo
+import com.potaninpm.soundr.presentation.components.SuccessfullyTraining
 import com.potaninpm.soundr.presentation.navigation.RootNavDestinations
 import com.potaninpm.soundr.presentation.viewModel.TrainingViewModel
 
@@ -137,37 +146,67 @@ fun TrainingCompleted(
     onResetTrainingClick: () -> Unit,
     onBackHomeClick: () -> Unit
 ) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Training Complete!",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold
-        )
+        SuccessfullyTraining()
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(
-            onClick = {
-                onResetTrainingClick()
-            }
-        ) {
-            Text("Start Again")
-        }
+        TrainingInfoStatCard(
+            12,
+            12,
+            onResetTrainingClick = {
 
-        Spacer(modifier = Modifier.height(8.dp))
+            },
+            onBackHomeClick = {
 
-        OutlinedButton(
-            onClick = {
-                onBackHomeClick()
             }
+        )
+
+    }
+}
+
+@Composable
+fun TrainingInfoStatCard(
+    totalTime: Long,
+    totalExercises: Long,
+    onResetTrainingClick: () -> Unit,
+    onBackHomeClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxSize(),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 8.dp
+        )
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Return Home")
+
+            Button(
+                modifier = Modifier,
+                onClick = {
+                    onResetTrainingClick()
+                }
+            ) {
+                Text("Start Again")
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedButton(
+                onClick = {
+                    onBackHomeClick()
+                }
+            ) {
+                Text("Return Home")
+            }
         }
     }
 }
@@ -230,11 +269,15 @@ private fun TrainingScreenContent(
     if (exercise == null) return
 
     val sheetState = rememberStandardBottomSheetState(
-        initialValue = SheetValue.Expanded
+        initialValue = SheetValue.Expanded,
+        confirmValueChange = {
+            false
+        }
     )
+
     val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = sheetState)
 
-    val expandedVideoHeight = 300.dp
+    val expandedVideoHeight = 450.dp
     val collapsedVideoHeight = 450.dp
 
     val videoHeight by remember {
@@ -263,7 +306,9 @@ private fun TrainingScreenContent(
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold
                     )
+
                     Spacer(modifier = Modifier.height(8.dp))
+
                     Text(
                         text = exercise.description,
                         style = MaterialTheme.typography.bodyMedium
@@ -284,7 +329,9 @@ private fun TrainingScreenContent(
                         ) {
                             Text("Back")
                         }
+
                         Spacer(modifier = Modifier.width(8.dp))
+
                         Button(
                             onClick = onNextClick,
                             modifier = Modifier.weight(1f)
@@ -318,7 +365,6 @@ private fun TrainingScreenContent(
             }
         },
         content = { innerPadding ->
-            // Основной контент – видео и кнопки управления
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
@@ -341,28 +387,6 @@ private fun TrainingScreenContent(
                         .clip(RoundedCornerShape(16.dp)),
                     videoId = context.resources.getIdentifier(exercise.videoId, "raw", context.packageName)
                 )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    OutlinedButton(
-                        onClick = onPrevClick,
-                        enabled = exerciseIndex > 0,
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text("Back")
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Button(
-                        onClick = onNextClick,
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text("Next")
-                    }
-                }
             }
         }
     )
