@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.potaninpm.soundr.presentation.state.TrainingUiState
 import com.potaninpm.soundr.data.local.entities.CompletedTraining
+import com.potaninpm.soundr.domain.model.TrainingInfo
 import com.potaninpm.soundr.domain.repository.ExerciseRepository
 import com.potaninpm.soundr.domain.repository.TrainingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +25,9 @@ class TrainingViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(TrainingUiState())
     val uiState: StateFlow<TrainingUiState> = _uiState.asStateFlow()
+
+    private val _completedTrainingInfo = MutableStateFlow(TrainingInfo())
+    val completedTrainingInfo: StateFlow<TrainingInfo> = _completedTrainingInfo.asStateFlow()
     
     private var startTimeMillis: Long = 0
 
@@ -50,7 +54,14 @@ class TrainingViewModel @Inject constructor(
                     progress = progress,
                     date = LocalDate.now()
                 )
-                
+
+                _completedTrainingInfo.update { currentState ->
+                    currentState.copy(
+                        duration = durationMillis,
+                        madeExercisesId = allExercisesIds
+                    )
+                }
+
                 trainingsRepository.insertTraining(completedTraining)
             } catch (e: Exception) {
                 e.printStackTrace()

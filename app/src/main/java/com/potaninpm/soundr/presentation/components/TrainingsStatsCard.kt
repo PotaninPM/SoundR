@@ -129,42 +129,6 @@ fun TrainingsStatsCard(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 WeekDaysRowAuto()
-
-                /*Spacer(modifier = Modifier.height(24.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Default.Notifications,
-                            contentDescription = null,
-                            tint = Color(0xFFFF5722),
-                            modifier = Modifier.size(24.dp)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = "2",
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold
-                        )
-
-                        Spacer(modifier = Modifier.width(4.dp))
-
-                        Text(
-                            text = "Day Streak",
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    }
-
-                    Text(
-                        text = "Personal Best: 4",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray
-                    )
-                }*/
             }
         }
     }
@@ -243,7 +207,7 @@ private fun DayWithNumber(
             modifier = Modifier
                 .size(36.dp)
                 .clip(CircleShape)
-                .background(if (isToday) Color(17, 129, 217, 255) else Color.Transparent),
+                .background(if (isToday) Color(24, 135, 222, 255) else Color.Transparent),
             contentAlignment = Alignment.Center
         ) {
             if (dayNumber.isNotEmpty()) {

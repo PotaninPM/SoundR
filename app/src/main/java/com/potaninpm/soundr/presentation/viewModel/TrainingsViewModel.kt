@@ -22,6 +22,9 @@ class TrainingsViewModel @Inject constructor(
     private val trainingsRepository: TrainingsRepository
 ) : ViewModel() {
 
+    private val _allTrainings = MutableStateFlow<List<TrainingInfo>>(emptyList())
+    val allTrainings: StateFlow<List<TrainingInfo>> = _allTrainings.asStateFlow()
+
     private val _dayTrainings = MutableStateFlow<List<TrainingInfo>>(emptyList())
     val dayTrainings: StateFlow<List<TrainingInfo>> = _dayTrainings.asStateFlow()
 
@@ -56,6 +59,14 @@ class TrainingsViewModel @Inject constructor(
             initialValue = 0
         )
 
+    fun loadAllTrainings() {
+        viewModelScope.launch {
+            trainingsRepository.getAllTrainings().collectLatest { completedTrainings ->
+                _allTrainings.value = completedTrainings.reversed().map { it.toTrainingInfo() }
+            }
+        }
+    }
+
     fun loadTrainingsByDate(date: LocalDate) {
         viewModelScope.launch {
             trainingsRepository.getTrainingsByDate(date).collectLatest { completedTrainings ->
@@ -67,8 +78,8 @@ class TrainingsViewModel @Inject constructor(
     private fun loadTodayTrainings() {
         viewModelScope.launch {
             trainingsRepository.getTrainingsByDate(LocalDate.now()).collectLatest { completedTrainings ->
-                _todayTrainings.value = completedTrainings.map { it.toTrainingInfo() }
-                _dayTrainings.value = completedTrainings.map { it.toTrainingInfo() }
+                _todayTrainings.value = completedTrainings.reversed().map { it.toTrainingInfo() }
+                _dayTrainings.value = completedTrainings.reversed().map { it.toTrainingInfo() }
             }
         }
     }
