@@ -11,7 +11,7 @@ fun CompletedTraining.toTrainingInfo(): TrainingInfo {
         timeStart = this.startTime,
         timeEnd = this.endTime,
         duration = this.duration,
-        allExercisesId = this.allExercisesId.map { it.toInt() },
-        madeExercisesId = this.madeExercisesId.map { it.toInt() }
+        allExercisesId = this.allExercisesId,
+        madeExercisesId = this.madeExercisesId
     )
 }

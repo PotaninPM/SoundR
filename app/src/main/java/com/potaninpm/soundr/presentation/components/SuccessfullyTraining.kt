@@ -34,12 +34,13 @@ fun SuccessfullyTraining() {
 
     Box {
         Text(
-            text = "Training Complete!",
+            text = "Training Completed!",
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
                 .align(Alignment.TopCenter)
+                .padding(top = 6.dp)
         )
         LottieAnimation(
             iterations = iterations,

@@ -4,6 +4,7 @@ import android.net.Uri
 import android.widget.VideoView
 import androidx.annotation.RawRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -29,6 +29,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SheetValue
@@ -45,19 +46,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.rememberLottieComposition
-import com.potaninpm.soundr.R
 import com.potaninpm.soundr.domain.model.ExerciseInfo
+import com.potaninpm.soundr.domain.model.TrainingInfo
 import com.potaninpm.soundr.presentation.components.SuccessfullyTraining
+import com.potaninpm.soundr.presentation.components.UpperStatsPart
 import com.potaninpm.soundr.presentation.navigation.RootNavDestinations
 import com.potaninpm.soundr.presentation.viewModel.TrainingViewModel
 
@@ -67,6 +66,7 @@ fun TrainingScreen(
     viewModel: TrainingViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val completedTraining by viewModel.completedTrainingInfo.collectAsState()
 
     Box(
         modifier = Modifier
@@ -90,6 +90,7 @@ fun TrainingScreen(
             }
             uiState.isCompleted -> {
                 TrainingCompleted(
+                    completedTraining = completedTraining,
                     onResetTrainingClick = {
                         viewModel.resetTraining()
                     },
@@ -143,6 +144,7 @@ fun ErrorWithTraining(
 
 @Composable
 fun TrainingCompleted(
+    completedTraining: TrainingInfo,
     onResetTrainingClick: () -> Unit,
     onBackHomeClick: () -> Unit
 ) {
@@ -150,7 +152,8 @@ fun TrainingCompleted(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SuccessfullyTraining()
@@ -158,13 +161,14 @@ fun TrainingCompleted(
         Spacer(modifier = Modifier.height(16.dp))
 
         TrainingInfoStatCard(
-            12,
-            12,
+            points = 10,
+            totalTime = completedTraining.duration / 1000 / 60,
+            totalExercises = completedTraining.madeExercisesId.size,
             onResetTrainingClick = {
-
+                onResetTrainingClick()
             },
             onBackHomeClick = {
-
+                onBackHomeClick()
             }
         )
 
@@ -173,8 +177,9 @@ fun TrainingCompleted(
 
 @Composable
 fun TrainingInfoStatCard(
+    points: Int,
     totalTime: Long,
-    totalExercises: Long,
+    totalExercises: Int,
     onResetTrainingClick: () -> Unit,
     onBackHomeClick: () -> Unit
 ) {
@@ -186,26 +191,64 @@ fun TrainingInfoStatCard(
         )
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .padding(16.dp)
         ) {
+            UpperStatsPart(
+                header = totalTime.toString(),
+                description = "Exercise time"
+            )
 
-            Button(
-                modifier = Modifier,
-                onClick = {
-                    onResetTrainingClick()
-                }
+            Spacer(modifier = Modifier.height(12.dp))
+            HorizontalDivider()
+            Spacer(modifier = Modifier.height(12.dp))
+
+            UpperStatsPart(
+                header = totalExercises.toString(),
+                description = "Total exercises"
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+            HorizontalDivider()
+            Spacer(modifier = Modifier.height(12.dp))
+
+            UpperStatsPart(
+                header = "+$points \uD83C\uDFC6",
+                description = "Points reward"
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
             ) {
-                Text("Start Again")
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            OutlinedButton(
-                onClick = {
-                    onBackHomeClick()
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    onClick = {
+                        onResetTrainingClick()
+                    }
+                ) {
+                    Text("Start Again")
                 }
-            ) {
-                Text("Return Home")
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                OutlinedButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    onClick = {
+                        onBackHomeClick()
+                    }
+                ) {
+                    Text("Return Home")
+                }
             }
         }
     }
