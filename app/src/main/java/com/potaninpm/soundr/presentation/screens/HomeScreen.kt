@@ -157,7 +157,7 @@ private fun HomeScreenContent(
     val prefs = remember { context.getSharedPreferences("soundr", Context.MODE_PRIVATE) }
 
     var showNotifications by remember {
-        mutableStateOf(prefs.getBoolean("show_notifications", true))
+        mutableStateOf(prefs.getBoolean("show_notifications", false))
     }
 
     var showTrainings by remember {
