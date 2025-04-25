@@ -74,7 +74,7 @@ jobs:
         run: ./gradlew assemble${{ matrix.buildType }}
 
       - name: ☁️ Upload ${{ matrix.buildType }} APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: app-${{ matrix.buildType }}.apk
           path: app/build/outputs/apk/${{ matrix.apkFolder }}/app-${{ matrix.apkFolder }}.apk
