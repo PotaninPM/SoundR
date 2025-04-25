@@ -124,12 +124,6 @@ private fun WelcomeScreenContent(
                 )
                 .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Vertical))
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-
-            )
-            
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
