@@ -62,7 +62,7 @@ SoundR - это современное Android-приложение, разра�
 ### Установка
 1. Клонируйте репозиторий:
    ```bash
-   git clone https://github.com/yourusername/SoundR.git
+   git clone https://github.com/PotaninPM/SoundR.git
    ```
 
 2. Откройте проект в Android Studio
