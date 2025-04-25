@@ -62,7 +62,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: app-${{ matrix.variant }}.apk
-          path: app/build/outputs/apk/${{ matrix.variant | lower }}/app-${{ matrix.variant | lower }}.apk
+          path: app/build/outputs/apk/${{ matrix.variant.toLowerCase() }}/app-${{ matrix.variant.toLowerCase() }}.apk
 
   instrumentation:
     name: Instrumentation Tests
