@@ -24,7 +24,7 @@ fun CustomSplashScreen(
             .background(MaterialTheme.colorScheme.surface),
     ) {
         val composition by rememberLottieComposition(
-            LottieCompositionSpec.RawRes(R.raw.splashscreen)
+            LottieCompositionSpec.RawRes(R.raw.success2)
         )
 
         val logoAnimationState = animateLottieCompositionAsState(composition = composition)
