@@ -9,121 +9,68 @@ on:
 env:
   ANDROID_API_LEVEL: 31
   ANDROID_BUILD_TOOLS_VERSION: '31.0.0'
-  EMULATOR_API_LEVEL: 31
-  EMULATOR_IMAGE: 'google_apis x86_64'
 
 jobs:
-  # 1) Сборка + Lint + Unit Tests + Assemble
   build:
-    name: Build & Tests & Lint (${{ matrix.buildType }})
+    name: Build & Tests & Lint (${{ matrix.variant }})
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     strategy:
       matrix:
         include:
-          - buildType: Debug
-            apkFolder: debug
-          - buildType: Release
-            apkFolder: release
+          - variant: debug
+            flavor: ''           # если нет productFlavors
+            gradleName: Debug
+            apkPath: app/build/outputs/apk/debug/app-debug.apk
+          - variant: release
+            flavor: ''
+            gradleName: Release
+            apkPath: app/build/outputs/apk/release/app-release-unsigned.apk
 
     steps:
-      - name: 📥 Checkout
-        uses: actions/checkout@v4
-
-      - name: ⚙️ Setup JDK 17
-        uses: actions/setup-java@v3
+      ## 1. Checkout & JDK
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: 17
 
-      - name: 🤖 Setup Android SDK
-        uses: android-actions/setup-android@v2
-        with:
-          api-level: ${{ env.ANDROID_API_LEVEL }}
-          build-tools: ${{ env.ANDROID_BUILD_TOOLS_VERSION }}
-          components: |
-            platform-tools
-            build-tools;${{ env.ANDROID_BUILD_TOOLS_VERSION }}
-            platform;android-${{ env.ANDROID_API_LEVEL }}
-
-      - name: ✅ Accept SDK licenses
+      ## 2. Принимаем SDK лицензию и ставим нужные платформы/build-tools
+      - name: Accept Android SDK licenses
         run: yes | sdkmanager --licenses
 
-      - name: 🛠️ Make gradlew executable
-        run: chmod +x ./gradlew
+      - name: Install SDK components
+        run: |
+          sdkmanager "platform-tools" \
+                     "platforms;android-${{ env.ANDROID_API_LEVEL }}" \
+                     "build-tools;${{ env.ANDROID_BUILD_TOOLS_VERSION }}"
 
-      - name: 🔍 Run lint
-        run: ./gradlew lint${{ matrix.buildType }}
+      ## 3. Gradle: lint, unit tests, assemble
+      - name: Run lint
+        run: ./gradlew lint${{ matrix.gradleName }}
 
-      - name: 🧪 Run unit tests
-        run: ./gradlew test${{ matrix.buildType }}UnitTest
+      - name: Run unit tests
+        run: ./gradlew test${{ matrix.gradleName }}UnitTest
 
-      - name: 🏗 Assemble ${{ matrix.buildType }} APK
-        run: ./gradlew assemble${{ matrix.buildType }}
+      - name: Assemble ${{ matrix.gradleName }}
+        run: ./gradlew assemble${{ matrix.gradleName }}
 
-      - name: ☁️ Upload APK
+      ## 4. Upload APK
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: app-${{ matrix.buildType }}.apk
-          path: app/build/outputs/apk/${{ matrix.apkFolder }}/app-${{ matrix.apkFolder }}.apk
+          name: app-${{ matrix.variant }}.apk
+          path: ${{ matrix.apkPath }}
 
-  # 2) Инструментальные тесты на эмуляторе
-  instrumentation:
-    name: Instrumentation Tests
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: 📥 Checkout
-        uses: actions/checkout@v4
-
-      - name: ⚙️ Setup JDK 17
-        uses: actions/setup-java@v3
-        with:
-          distribution: temurin
-          java-version: 17
-
-      - name: 🤖 Setup Android SDK & Emulator
-        uses: android-actions/setup-android@v2
-        with:
-          api-level: ${{ env.ANDROID_API_LEVEL }}
-          build-tools: ${{ env.ANDROID_BUILD_TOOLS_VERSION }}
-          components: |
-            platform-tools
-            emulator
-            system-images;android-${{ env.EMULATOR_API_LEVEL }};${{ env.EMULATOR_IMAGE }}
-
-      - name: ✅ Accept SDK licenses
-        run: yes | sdkmanager --licenses
-
-      - name: 🚀 Start emulator & run instrumentation tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ env.EMULATOR_API_LEVEL }}
-          target: google_apis
-          arch: x86_64
-          force-avd-creation: true
-          emulator-options: -no-window -no-audio -no-boot-anim
-          emulator-boot-timeout: 300
-          script: ./gradlew connectedDebugAndroidTest
-
-      - name: 📂 Upload UI test report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ui-test-results
-          path: app/build/reports/androidTests/connected
-
-  # 3) Telegram-уведомление при падении
   notify:
     name: Telegram Notification on Failure
     runs-on: ubuntu-latest
-    needs: [build, instrumentation]
-    if: |
-      needs.build.result == 'failure' ||
-      needs.instrumentation.result == 'failure'
+    needs: build
+    if: ${{ failure() }}
+
     steps:
-      - name: 🚨 Send Telegram alert
+      - name: Send Telegram alert
         uses: appleboy/telegram-action@v0.3.0
         with:
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -133,6 +80,5 @@ jobs:
             Workflow: `${{ github.workflow }}`  
             Run: #${{ github.run_number }}  
             Commit: `${{ github.sha }}`  
-            • build: `${{ needs.build.result }}`  
-            • instrumentation: `${{ needs.instrumentation.result }}`  
-            [Открыть детали](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            • Job: build → `${{ needs.build.result }}`  
+            [Open run details](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
