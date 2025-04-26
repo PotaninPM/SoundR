@@ -20,7 +20,7 @@ import com.potaninpm.soundr.R
 fun CustomProgressBar(
     modifier: Modifier = Modifier,
     progress: Float,
-    insideThing: @Composable () -> Unit = {}
+    insideThing: (@Composable () -> Unit)? = null
 ) {
     val progressColor = when {
         progress < 0.25f -> Color.Red.copy(alpha = 1f)
@@ -55,16 +55,20 @@ fun CustomProgressBar(
                 modifier = Modifier.size(25.dp)
             )
         } else {
-            Box(
-                modifier = Modifier.size(50.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "${(progress * 100).toInt()}%",
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = progressColor,
-                )
+            if (insideThing == null) {
+                Box(
+                    modifier = Modifier.size(50.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "${(progress * 100).toInt()}%",
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = progressColor,
+                    )
+                }
+            } else {
+                insideThing()
             }
         }
     }

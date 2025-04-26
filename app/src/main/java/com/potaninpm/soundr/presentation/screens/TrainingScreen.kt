@@ -59,6 +59,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.potaninpm.soundr.domain.model.ExerciseInfo
 import com.potaninpm.soundr.domain.model.TrainingInfo
+import com.potaninpm.soundr.presentation.components.CustomProgressBar
 import com.potaninpm.soundr.presentation.components.SuccessfullyTraining
 import com.potaninpm.soundr.presentation.components.UpperStatsPart
 import com.potaninpm.soundr.presentation.navigation.RootNavDestinations
@@ -373,25 +374,16 @@ private fun TrainingScreenContent(
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.weight(1f)
                         )
-                        
-                        Card(
-                            colors = CardDefaults.cardColors(
-                                containerColor = if (remainingTime > 0) 
-                                    MaterialTheme.colorScheme.primaryContainer 
-                                else 
-                                    MaterialTheme.colorScheme.surfaceVariant
-                            )
-                        ) {
-                            Text(
-                                text = "${remainingTime}s",
-                                style = MaterialTheme.typography.titleMedium,
-                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                                color = if (remainingTime > 0) 
-                                    MaterialTheme.colorScheme.onPrimaryContainer 
-                                else 
-                                    MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
+                        CustomProgressBar(
+                            progress = (exercise.totalDuration - remainingTime).toFloat() / exercise.totalDuration,
+                            insideThing = {
+                                Text(
+                                    text = "${remainingTime}s",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        )
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -451,25 +443,17 @@ private fun TrainingScreenContent(
                         ) {
                             Text("Back")
                         }
-                        
-                        Card(
-                            colors = CardDefaults.cardColors(
-                                containerColor = if (remainingTime > 0) 
-                                    MaterialTheme.colorScheme.primaryContainer 
-                                else 
-                                    MaterialTheme.colorScheme.surfaceVariant
-                            )
-                        ) {
-                            Text(
-                                text = "${remainingTime}s",
-                                style = MaterialTheme.typography.titleMedium,
-                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                                color = if (remainingTime > 0) 
-                                    MaterialTheme.colorScheme.onPrimaryContainer 
-                                else 
-                                    MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
+
+                        CustomProgressBar(
+                            progress = (exercise.totalDuration - remainingTime).toFloat() / exercise.totalDuration,
+                            insideThing = {
+                                Text(
+                                    text = "${remainingTime}s",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        )
                         
                         Spacer(modifier = Modifier.width(8.dp))
                         
