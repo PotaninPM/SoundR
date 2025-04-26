@@ -9,9 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -42,51 +39,41 @@ fun TrainingView(
     val endTime = formatTimestamp(training.timeEnd)
 
     val durationMinutes = Duration.ofMillis(training.duration).toMinutes()
-    
-   /* Card(
+    Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f)
+            .padding(vertical = 16.dp, horizontal = 14.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        CustomProgressBar(
+            progress = training.progress / 100f
         )
-    ) {*/
-        Row(
+
+        Spacer(modifier = Modifier.width(12.dp))
+
+        Column(
             modifier = Modifier
-                .padding(vertical = 16.dp, horizontal = 14.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxWidth()
         ) {
-            CustomProgressBar(
-                progress = training.progress / 100f
+            Text(
+                text = "Тренировка №${training.id}",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold
             )
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = "Тренировка №${training.id}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Bold
-                )
+            TimeSection(
+                startTime = startTime,
+                endTime = endTime,
+                durationMinutes = durationMinutes
+            )
 
-                Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-                TimeSection(
-                    startTime = startTime,
-                    endTime = endTime,
-                    durationMinutes = durationMinutes
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                DoneTrainingsInfo(training)
-            }
+            DoneTrainingsInfo(training)
         }
-    //}
+    }
+
 }
 
 @Composable
