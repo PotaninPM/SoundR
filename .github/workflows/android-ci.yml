@@ -1,6 +1,5 @@
 name: Android CI
 
-# Триггер — только main
 on:
   push:
     branches: [ main ]
@@ -8,11 +7,13 @@ on:
     branches: [ main ]
 
 env:
+  ANDROID_API_LEVEL: 31
+  ANDROID_BUILD_TOOLS_VERSION: '31.0.0'
   EMULATOR_API_LEVEL: 31
   EMULATOR_IMAGE: 'google_apis x86_64'
 
 jobs:
-  # 1) Build / Lint / Unit Tests / Assemble
+  # 1) Сборка + Lint + Unit Tests + Assemble
   build:
     name: Build & Tests & Lint (${{ matrix.buildType }})
     runs-on: ubuntu-latest
@@ -35,19 +36,21 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: 🛠️ Make gradlew executable
-        run: chmod +x gradlew
-
-      - name: 🧱 Cache Gradle
-        uses: actions/cache@v3
+      - name: 🤖 Setup Android SDK
+        uses: android-actions/setup-android@v2
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*','**/gradle-wrapper.properties') }}
+          api-level: ${{ env.ANDROID_API_LEVEL }}
+          build-tools: ${{ env.ANDROID_BUILD_TOOLS_VERSION }}
+          components: |
+            platform-tools
+            build-tools;${{ env.ANDROID_BUILD_TOOLS_VERSION }}
+            platform;android-${{ env.ANDROID_API_LEVEL }}
 
-      - name: ✅ Accept Android licenses
+      - name: ✅ Accept SDK licenses
         run: yes | sdkmanager --licenses
+
+      - name: 🛠️ Make gradlew executable
+        run: chmod +x ./gradlew
 
       - name: 🔍 Run lint
         run: ./gradlew lint${{ matrix.buildType }}
@@ -55,7 +58,7 @@ jobs:
       - name: 🧪 Run unit tests
         run: ./gradlew test${{ matrix.buildType }}UnitTest
 
-      - name: 🏗️ Assemble ${{ matrix.buildType }} APK
+      - name: 🏗 Assemble ${{ matrix.buildType }} APK
         run: ./gradlew assemble${{ matrix.buildType }}
 
       - name: ☁️ Upload APK
@@ -64,11 +67,12 @@ jobs:
           name: app-${{ matrix.buildType }}.apk
           path: app/build/outputs/apk/${{ matrix.apkFolder }}/app-${{ matrix.apkFolder }}.apk
 
-  # 2) Instrumentation Tests на эмуляторе
+  # 2) Инструментальные тесты на эмуляторе
   instrumentation:
     name: Instrumentation Tests
     runs-on: ubuntu-latest
     needs: build
+
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v4
@@ -79,13 +83,20 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: 🛠️ Make gradlew executable
-        run: chmod +x gradlew
+      - name: 🤖 Setup Android SDK & Emulator
+        uses: android-actions/setup-android@v2
+        with:
+          api-level: ${{ env.ANDROID_API_LEVEL }}
+          build-tools: ${{ env.ANDROID_BUILD_TOOLS_VERSION }}
+          components: |
+            platform-tools
+            emulator
+            system-images;android-${{ env.EMULATOR_API_LEVEL }};${{ env.EMULATOR_IMAGE }}
 
-      - name: ✅ Accept Android licenses
+      - name: ✅ Accept SDK licenses
         run: yes | sdkmanager --licenses
 
-      - name: 🖥️ Start emulator & run instrumentation tests
+      - name: 🚀 Start emulator & run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ env.EMULATOR_API_LEVEL }}
@@ -103,7 +114,7 @@ jobs:
           name: ui-test-results
           path: app/build/reports/androidTests/connected
 
-  # 3) Telegram notification on any failure
+  # 3) Telegram-уведомление при падении
   notify:
     name: Telegram Notification on Failure
     runs-on: ubuntu-latest
