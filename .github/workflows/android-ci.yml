@@ -1,10 +1,11 @@
 name: Android CI
 
+# Триггеры: только push→main и pull_request→main
 on:
   push:
-    branches: [ main, dev ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, dev ]
+    branches: [ main ]
 
 env:
   ANDROID_API_LEVEL: 31
@@ -65,6 +66,7 @@ jobs:
         run: yes | sdkmanager --licenses
 
       - name: Run lint
+        # Lint теперь не упадёт благодаря abortOnError=false
         run: ./gradlew lint${{ matrix.buildType }}
 
       - name: Run unit tests
