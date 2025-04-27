@@ -1,142 +1,162 @@
 [
   {
     "id": "0",
-    "name": "Приседания",
-    "description": "Как выполнять:\n1. ",
+    "name": "Качели",
+    "description": "Как выполнять:\n1. Поднесите язык к небу.\n2. Опустите его вниз как показано на видео.\n3. Повторите.",
     "videoId": "video1",
-    "timesToDo": 3
+    "timesToDo": 3,
+    "totalDuration": 30
   },
   {
     "id": "1",
     "name": "Отжимания",
     "description": "Как выполнять:\n1. ",
     "videoId": "video2",
-    "timesToDo": 5
+    "timesToDo": 5,
+    "totalDuration": 30
   },
   {
     "id": "2",
-    "name": "Планка",
-    "description": "Как выполнять:\n1. ",
+    "name": "Барабанщик",
+    "description": "Как выполнять:\n1. Поднесите кончик языка к небу.\n2. Стучите, издавая звук как на видео.",
     "videoId": "video3",
-    "timesToDo": 6
+    "timesToDo": 6,
+    "totalDuration": 30
   },
   {
     "id": "3",
-    "name": "Планка",
-    "description": "Как выполнять:\n1. ",
+    "name": "Поезд",
+    "description": "Как выполнять:\n1. Поднесите кончик языка к небу.\n2. Издавайте звук как на видео.",
     "videoId": "video4",
-    "timesToDo": 6
+    "timesToDo": 6,
+    "totalDuration": 30
   },
   {
     "id": "4",
-    "name": "Планка",
-    "description": "Как выполнять:\n1. ",
+    "name": "Дзадзы",
+    "description": "Как выполнять:\n1. Хрен знает",
     "videoId": "video5",
-    "timesToDo": 6
+    "timesToDo": 6,
+    "totalDuration": 30
   },
   {
     "id": "5",
-    "name": "Планка",
-    "description": "Как выполнять:\n1. ",
+    "name": "Звонок",
+    "description": "Как выполнять:\n1. Звените как на видео.",
     "videoId": "video6",
-    "timesToDo": 6
+    "timesToDo": 6,
+    "totalDuration": 30
   },
   {
     "id": "6",
-    "name": "Планка",
-    "description": "Как выполнять:\n1. ",
+    "name": "Гармошка",
+    "description": "Как выполнять:\n1. Сделайте грибок.\n2. Закрывайте рот.",
     "videoId": "video7",
-    "timesToDo": 6
+    "timesToDo": 6,
+    "totalDuration": 30
   },
   {
     "id": "7",
-    "name": "Планка",
-    "description": "Как выполнять:\n1. ",
+    "name": "Грибок",
+    "description": "Как выполнять:\n1. Прислоните язык к небу сильно.",
     "videoId": "video8",
-    "timesToDo": 6
+    "timesToDo": 6,
+    "totalDuration": 30
   },
   {
     "id": "8",
-    "name": "Планка",
-    "description": "Как выполнять:\n1. ",
+    "name": "Лошадка + маляр",
+    "description": "Как выполнять:\n1. Используйте упржнение \"Маляр\".\n2. Издавайте звуки как на видео.",
     "videoId": "video9",
-    "timesToDo": 6
+    "timesToDo": 6,
+    "totalDuration": 30
   },
   {
     "id": "9",
-    "name": "Планка",
-    "description": "Как выполнять:\n1. ",
+    "name": "Наказание",
+    "description": "Как выполнять:\n1. Стучите по языку.\n2. Издавайте звуки как на видео.",
     "videoId": "video10",
-    "timesToDo": 6
+    "timesToDo": 6,
+    "totalDuration": 30
   },
   {
     "id": "10",
-    "name": "Планка",
-    "description": "Как выполнять:\n1. ",
+    "name": "Индюк",
+    "description": "Как выполнять:\n1. Как на видео.",
     "videoId": "video11",
-    "timesToDo": 6
+    "timesToDo": 6,
+    "totalDuration": 30
   },
   {
     "id": "11",
-    "name": "Планка",
-    "description": "Как выполнять:\n1. ",
+    "name": "Чистим зубы",
+    "description": "Как выполнять:\n1. Проводите языком по верхним зубам.",
     "videoId": "video12",
-    "timesToDo": 6
+    "timesToDo": 6,
+    "totalDuration": 30
   },
   {
     "id": "12",
-    "name": "Планка",
-    "description": "Как выполнять:\n1. ",
+    "name": "Лошадки",
+    "description": "Как выполнять:\n1. Лошадка дальняя.\n2. Лошадка ближняя.",
     "videoId": "video13",
-    "timesToDo": 6
+    "timesToDo": 6,
+    "totalDuration": 30
   },
   {
     "id": "13",
-    "name": "Планка",
-    "description": "Как выполнять:\n1. ",
+    "name": "Вкусное варенье",
+    "description": "Как выполнять:\n1. Как на видео (3 уровня сложности).",
     "videoId": "video14",
-    "timesToDo": 6
+    "timesToDo": 6,
+    "totalDuration": 30
   },
   {
     "id": "14",
-    "name": "Планка",
-    "description": "Как выполнять:\n1. ",
+    "name": "Комарик",
+    "description": "Как выполнять:\n1. Жужжите как комарик.",
     "videoId": "video15",
-    "timesToDo": 6
+    "timesToDo": 6,
+    "totalDuration": 30
   },
   {
     "id": "15",
-    "name": "Планка",
-    "description": "Как выполнять:\n1. ",
+    "name": "Маляр",
+    "description": "Как выполнять:\n1. Проводите языком вверх и вниз по горлу.",
     "videoId": "video16",
-    "timesToDo": 6
+    "timesToDo": 6,
+    "totalDuration": 30
   },
   {
     "id": "16",
-    "name": "Планка",
-    "description": "Как выполнять:\n1. ",
+    "name": "Фокус",
+    "description": "Как выполнять:\n1. Дуйте на салфетку как на видео.",
     "videoId": "video17",
-    "timesToDo": 6
+    "timesToDo": 6,
+    "totalDuration": 30
   },
   {
     "id": "17",
-    "name": "Планка",
-    "description": "Как выполнять:\n1. ",
+    "name": "Барабанщик",
+    "description": "Как выполнять:\n1. Усиленно стучите кончиком языка по небу.",
     "videoId": "video18",
-    "timesToDo": 6
+    "timesToDo": 6,
+    "totalDuration": 30
   },
   {
     "id": "18",
-    "name": "Планка",
-    "description": "Как выполнять:\n1. ",
+    "name": "Ветерок с горки",
+    "description": "Как выполнять:\n1. Дуйте на язык как с горки.",
     "videoId": "video19",
-    "timesToDo": 6
+    "timesToDo": 6,
+    "totalDuration": 30
   },
   {
     "id": "19",
-    "name": "Планка",
-    "description": "Как выполнять:\n1. ",
+    "name": "Комарик2",
+    "description": "Как выполнять:\n1. Жужжите как комарик, но более пронзительно.",
     "videoId": "video20",
-    "timesToDo": 6
+    "timesToDo": 6,
+    "totalDuration": 30
   }
 ]

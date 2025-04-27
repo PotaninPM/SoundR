@@ -38,10 +38,14 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,10 +59,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.potaninpm.soundr.domain.model.ExerciseInfo
 import com.potaninpm.soundr.domain.model.TrainingInfo
+import com.potaninpm.soundr.presentation.components.CustomProgressBar
 import com.potaninpm.soundr.presentation.components.SuccessfullyTraining
 import com.potaninpm.soundr.presentation.components.UpperStatsPart
 import com.potaninpm.soundr.presentation.navigation.RootNavDestinations
 import com.potaninpm.soundr.presentation.viewModel.TrainingViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun TrainingScreen(
@@ -333,6 +339,19 @@ private fun TrainingScreenContent(
         }
     }
 
+    var remainingTime by remember { mutableIntStateOf(exercise.totalDuration) }
+    var isTimerRunning by remember { mutableStateOf(true) }
+
+    LaunchedEffect(exercise) {
+        remainingTime = exercise.totalDuration
+        isTimerRunning = true
+        
+        while (remainingTime > 0 && isTimerRunning) {
+            delay(1000)
+            remainingTime--
+        }
+    }
+
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetPeekHeight = 80.dp,
@@ -344,11 +363,28 @@ private fun TrainingScreenContent(
                     .padding(16.dp)
             ) {
                 if (sheetState.currentValue == SheetValue.Expanded) {
-                    Text(
-                        text = exercise.name,
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = exercise.name,
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.weight(1f)
+                        )
+                        CustomProgressBar(
+                            progress = (exercise.totalDuration - remainingTime).toFloat() / exercise.totalDuration,
+                            insideThing = {
+                                Text(
+                                    text = "${remainingTime}s",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        )
+                    }
 
                     Spacer(modifier = Modifier.height(8.dp))
 
@@ -366,7 +402,10 @@ private fun TrainingScreenContent(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         OutlinedButton(
-                            onClick = onPrevClick,
+                            onClick = {
+                                isTimerRunning = false
+                                onPrevClick()
+                            },
                             enabled = exerciseIndex > 0,
                             modifier = Modifier.weight(1f)
                         ) {
@@ -376,7 +415,11 @@ private fun TrainingScreenContent(
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Button(
-                            onClick = onNextClick,
+                            onClick = {
+                                isTimerRunning = false
+                                onNextClick()
+                            },
+                            enabled = remainingTime == 0,
                             modifier = Modifier.weight(1f)
                         ) {
                             Text("Next")
@@ -387,18 +430,39 @@ private fun TrainingScreenContent(
                         modifier = Modifier
                             .fillMaxWidth()
                             .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Vertical)),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         OutlinedButton(
-                            onClick = onPrevClick,
+                            onClick = {
+                                isTimerRunning = false
+                                onPrevClick()
+                            },
                             enabled = exerciseIndex > 0,
                             modifier = Modifier.weight(1f)
                         ) {
                             Text("Back")
                         }
+
+                        CustomProgressBar(
+                            progress = (exercise.totalDuration - remainingTime).toFloat() / exercise.totalDuration,
+                            insideThing = {
+                                Text(
+                                    text = "${remainingTime}s",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        )
+                        
                         Spacer(modifier = Modifier.width(8.dp))
+                        
                         Button(
-                            onClick = onNextClick,
+                            onClick = {
+                                isTimerRunning = false
+                                onNextClick()
+                            },
+                            enabled = remainingTime == 0,
                             modifier = Modifier.weight(1f)
                         ) {
                             Text("Next")
@@ -415,7 +479,6 @@ private fun TrainingScreenContent(
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
                 Text(
                     text = "Exercise ${exerciseIndex + 1} of $totalExercises",
                     style = MaterialTheme.typography.titleMedium,
