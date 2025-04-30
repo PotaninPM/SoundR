@@ -14,6 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.potaninpm.soundr.data.local.entities.CompletedTraining
+import com.potaninpm.soundr.domain.model.TrainingInfo
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
@@ -22,7 +23,7 @@ import java.util.*
 @Composable
 fun TrainingInfoScreen(
     navController: NavController,
-    completedTraining: List<CompletedTraining>,
+    completedTraining: TrainingInfo,
     onBackClick: () -> Unit = {}
 ) {
     Scaffold(
@@ -64,7 +65,7 @@ fun TrainingInfoScreen(
 @Composable
 private fun TrainingInfoScreenContent(
     modifier: Modifier,
-    completedTraining: List<CompletedTraining>
+    completedTraining: TrainingInfo
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -72,13 +73,13 @@ private fun TrainingInfoScreenContent(
     ) {
         item {
             TopInfoBar(
-                trainingNumber = completedTraining.size
+                trainingNumber = completedTraining.id.toInt()
             )
         }
-        
-        items(completedTraining) { training ->
+
+        item {
             CompletedExerciseInfo(
-                training = training
+                training = completedTraining
             )
         }
     }
@@ -115,7 +116,7 @@ fun TopInfoBar(
 
 @Composable
 fun CompletedExerciseInfo(
-    training: CompletedTraining
+    training: TrainingInfo
 ) {
     Card(
         modifier = Modifier.fillMaxWidth()
