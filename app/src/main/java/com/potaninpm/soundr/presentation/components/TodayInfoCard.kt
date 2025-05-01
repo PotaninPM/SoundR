@@ -183,7 +183,6 @@ fun NotificationsInfo(
     onShowNotificationsChange: (Boolean) -> Unit
 ) {
     var showNewTimePicker by remember { mutableStateOf(false) }
-    var reminderForEdit by remember { mutableStateOf<NotificationReminder?>(null) }
 
     val showNotificationsPainter = if (showNotifications) {
         painterResource(R.drawable.visibility_24px)

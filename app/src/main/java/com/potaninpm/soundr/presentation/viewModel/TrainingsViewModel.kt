@@ -22,8 +22,6 @@ import javax.inject.Inject
 class TrainingsViewModel @Inject constructor(
     private val trainingsRepository: TrainingsRepository
 ) : ViewModel() {
-    private val _selectedTraining = MutableStateFlow<TrainingInfo?>(null)
-    val selectedTraining: StateFlow<TrainingInfo?> = _selectedTraining.asStateFlow()
 
     private val _allTrainings = MutableStateFlow<List<TrainingInfo>>(emptyList())
     val allTrainings: StateFlow<List<TrainingInfo>> = _allTrainings.asStateFlow()

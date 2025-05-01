@@ -3,7 +3,6 @@ package com.potaninpm.soundr.presentation.screens
 import android.app.Activity
 import android.graphics.Bitmap
 import android.net.Uri
-import android.util.Log
 import android.view.WindowManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
