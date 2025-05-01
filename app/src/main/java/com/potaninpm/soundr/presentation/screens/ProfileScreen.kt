@@ -3,6 +3,7 @@ package com.potaninpm.soundr.presentation.screens
 import android.app.Activity
 import android.graphics.Bitmap
 import android.net.Uri
+import android.util.Log
 import android.view.WindowManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -56,14 +57,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.potaninpm.soundr.domain.model.TrainingInfo
 import com.potaninpm.soundr.presentation.components.TrainingView
 import com.potaninpm.soundr.presentation.components.UpperStatsPart
+import com.potaninpm.soundr.presentation.navigation.RootNavDestinations
 import com.potaninpm.soundr.presentation.viewModel.ProfileViewModel
 import com.potaninpm.soundr.presentation.viewModel.TrainingsViewModel
 
 @Composable
 fun ProfileScreen(
+    navController: NavController,
     trainingsViewModel: TrainingsViewModel = hiltViewModel(),
     profileViewModel: ProfileViewModel = hiltViewModel(),
 ) {
@@ -97,6 +101,9 @@ fun ProfileScreen(
         totalProgress = totalProgress,
         userName = userName,
         hasProfileImage = hasProfileImage,
+        onCompletedTrainingClick = { training ->
+            navController.navigate("${RootNavDestinations.TrainingInfo}/${training.id}")
+        },
         profileViewModel = profileViewModel
     )
 }
@@ -109,6 +116,7 @@ private fun ProfileScreenContent(
     totalProgress: Float,
     userName: String,
     hasProfileImage: Boolean,
+    onCompletedTrainingClick: (TrainingInfo) -> Unit,
     profileViewModel: ProfileViewModel
 ) {
     val bitmap = remember { mutableStateOf<Bitmap?>(null) }
@@ -188,7 +196,11 @@ private fun ProfileScreenContent(
                     allTrainings.forEach { training ->
                         Spacer(modifier = Modifier.height(12.dp))
 
-                        OutlinedCard {
+                        OutlinedCard(
+                            onClick = {
+                                onCompletedTrainingClick(training)
+                            }
+                        ) {
                             TrainingView(training)
                         }
                     }

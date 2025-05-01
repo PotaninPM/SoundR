@@ -5,9 +5,11 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.potaninpm.soundr.presentation.screens.CalendarScreen
 import com.potaninpm.soundr.presentation.screens.HomeScreen
 import com.potaninpm.soundr.presentation.screens.ProfileScreen
@@ -46,7 +48,9 @@ fun RootNavigation(
         }
 
         composable<RootNavDestinations.Profile> {
-            ProfileScreen()
+            ProfileScreen(
+                navController = rootNavController,
+            )
         }
 
         /*composable<RootNavDestinations.TrainingInfo> {
@@ -56,8 +60,19 @@ fun RootNavigation(
             )
         }*/
 
+        composable(
+            route = "${RootNavDestinations.TrainingInfo}/{trainingId}",
+            arguments = listOf(navArgument("trainingId") { type = NavType.IntType })
+        ) { backStackEntry ->
+                val trainingId = backStackEntry.arguments!!.getInt("trainingId")
+            TrainingInfoScreen(
+                navController = rootNavController,
+                trainingId
+            )
+        }
+
         composable<RootNavDestinations.Calendar> {
-            CalendarScreen()
+            CalendarScreen(navController = rootNavController)
         }
 
         composable<RootNavDestinations.Training> {

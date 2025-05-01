@@ -6,7 +6,7 @@ import java.time.LocalDate
 
 @Entity(tableName = "completed_trainings")
 data class CompletedTraining(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val duration: Long,
     val startTime: Long,
     val endTime: Long,

@@ -48,6 +48,7 @@ fun TodayInfoCard(
     showTrainings: Boolean = true,
     onShowTrainingsChange: (Boolean) -> Unit = {},
     trainings: List<TrainingInfo>,
+    onTrainingCardClick: (TrainingInfo) -> Unit = {},
     onStartTrainingClick: () -> Unit = {}
 ) {
     val date = LocalDate.now()
@@ -108,6 +109,9 @@ fun TodayInfoCard(
 
                     trainings.forEach { training ->
                         Card(
+                            onClick = {
+                                onTrainingCardClick(training)
+                            },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 8.dp),
