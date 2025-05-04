@@ -2,8 +2,6 @@
 
 SoundR - это современное Android-приложение, разработанное для помощи пользователям в улучшении произношения звука "Р" и слов, содержащих этот звук.
 
-![SoundR App Banner](screenshots/banner.png)
-
 ## Возможности
 
 ### 📱 Красивый пользовательский интерфейс
@@ -34,11 +32,14 @@ SoundR - это современное Android-приложение, разра�
   <img src="screenshots/screenshot1.jpg" alt="Экран приветствия" width="250"/>
   <img src="screenshots/screenshot2.jpg" alt="Главный экран" width="250"/>
   <img src="screenshots/screenshot3.jpg" alt="Экран тренировки" width="250"/>
-  <img src="screenshots/screenshot4.jpg" alt="Экран тренировки" width="250"/>
 </div>
 
 <div align="center">
+  <img src="screenshots/screenshot4.jpg" alt="Экран тренировки" width="250"/>
   <img src="screenshots/screenshot5.jpg" alt="Экран профиля" width="250"/>
+</div>
+
+<div align="center">
   <img src="screenshots/screenshot6.jpg" alt="Экран календаря" width="250"/>
   <img src="screenshots/screenshot7.jpg" alt="Экран уведомлений" width="250"/>
   <img src="screenshots/screenshot8.jpg" alt="Экран уведомлений" width="250"/>
