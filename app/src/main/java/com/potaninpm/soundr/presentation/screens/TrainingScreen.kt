@@ -52,11 +52,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.potaninpm.soundr.R
 import com.potaninpm.soundr.domain.model.ExerciseInfo
 import com.potaninpm.soundr.domain.model.TrainingInfo
 import com.potaninpm.soundr.presentation.components.CustomProgressBar
@@ -133,7 +135,7 @@ fun ErrorWithTraining(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Error: $error",
+            text = stringResource(R.string.error_message, error),
             color = Color.Red
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -143,7 +145,7 @@ fun ErrorWithTraining(
                 onGoBackClick()
             }
         ) {
-            Text("Go Back")
+            Text(stringResource(R.string.go_back))
         }
     }
 }
@@ -203,7 +205,7 @@ fun TrainingInfoStatCard(
         ) {
             UpperStatsPart(
                 header = totalTime.toString(),
-                description = "Exercise time"
+                description = stringResource(R.string.exercise_time)
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -212,7 +214,7 @@ fun TrainingInfoStatCard(
 
             UpperStatsPart(
                 header = totalExercises.toString(),
-                description = "Total exercises"
+                description = stringResource(R.string.total_exercises)
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -221,7 +223,7 @@ fun TrainingInfoStatCard(
 
             UpperStatsPart(
                 header = "+$points \uD83C\uDFC6",
-                description = "Points reward"
+                description = stringResource(R.string.points_reward)
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -240,7 +242,7 @@ fun TrainingInfoStatCard(
                         onResetTrainingClick()
                     }
                 ) {
-                    Text("Start Again")
+                    Text(stringResource(R.string.start_again))
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -253,7 +255,7 @@ fun TrainingInfoStatCard(
                         onBackHomeClick()
                     }
                 ) {
-                    Text("Return Home")
+                    Text(stringResource(R.string.return_home))
                 }
             }
         }
@@ -378,7 +380,7 @@ private fun TrainingScreenContent(
                             progress = (exercise.totalDuration - remainingTime).toFloat() / exercise.totalDuration,
                             insideThing = {
                                 Text(
-                                    text = "${remainingTime}s",
+                                    text = stringResource(R.string.remaining_time, remainingTime),
                                     style = MaterialTheme.typography.titleMedium,
                                     color = MaterialTheme.colorScheme.onSurface
                                 )
@@ -409,7 +411,7 @@ private fun TrainingScreenContent(
                             enabled = exerciseIndex > 0,
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("Back")
+                            Text(stringResource(R.string.back))
                         }
 
                         Spacer(modifier = Modifier.width(8.dp))
@@ -422,7 +424,7 @@ private fun TrainingScreenContent(
                             enabled = remainingTime == 0,
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("Next")
+                            Text(stringResource(R.string.next))
                         }
                     }
                 } else {
@@ -441,14 +443,14 @@ private fun TrainingScreenContent(
                             enabled = exerciseIndex > 0,
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("Back")
+                            Text(stringResource(R.string.back))
                         }
 
                         CustomProgressBar(
                             progress = (exercise.totalDuration - remainingTime).toFloat() / exercise.totalDuration,
                             insideThing = {
                                 Text(
-                                    text = "${remainingTime}s",
+                                    text = stringResource(R.string.remaining_time, remainingTime),
                                     style = MaterialTheme.typography.titleMedium,
                                     color = MaterialTheme.colorScheme.onSurface
                                 )
@@ -465,7 +467,7 @@ private fun TrainingScreenContent(
                             enabled = remainingTime == 0,
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("Next")
+                            Text(stringResource(R.string.next))
                         }
                     }
                 }
@@ -480,7 +482,7 @@ private fun TrainingScreenContent(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Exercise ${exerciseIndex + 1} of $totalExercises",
+                    text = stringResource(R.string.exercise_progress, exerciseIndex + 1, totalExercises),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )

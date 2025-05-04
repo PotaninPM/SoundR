@@ -23,11 +23,13 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.potaninpm.soundr.R
 import com.potaninpm.soundr.domain.model.UserInfo
 import java.time.LocalDate
 
@@ -104,7 +106,7 @@ fun TrainingsStatsCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "This week",
+                        text = stringResource(R.string.this_week),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -113,7 +115,7 @@ fun TrainingsStatsCard(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "History",
+                            text = stringResource(R.string.history),
                             style = MaterialTheme.typography.bodyMedium,
                             color = Color(0xFF00A67E)
                         )

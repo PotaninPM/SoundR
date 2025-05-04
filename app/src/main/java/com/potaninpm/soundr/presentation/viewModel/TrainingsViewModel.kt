@@ -6,6 +6,7 @@ import com.potaninpm.soundr.data.mappers.toTrainingInfo
 import com.potaninpm.soundr.domain.model.TrainingInfo
 import com.potaninpm.soundr.domain.repository.TrainingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -59,6 +60,12 @@ class TrainingsViewModel @Inject constructor(
             initialValue = 0
         )
 
+    fun loadTrainingById(id: Int): Flow<TrainingInfo?> =
+        trainingsRepository.getTrainingById(id)
+            .map { completedTraining ->
+                completedTraining?.toTrainingInfo()
+            }
+
     fun loadAllTrainings() {
         viewModelScope.launch {
             trainingsRepository.getAllTrainings().collectLatest { completedTrainings ->
@@ -74,6 +81,8 @@ class TrainingsViewModel @Inject constructor(
             }
         }
     }
+
+
 
     private fun loadTodayTrainings() {
         viewModelScope.launch {

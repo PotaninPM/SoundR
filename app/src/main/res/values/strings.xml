@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">SoundR</string>
+    
+    <!-- Calendar -->
     <string name="mon">Mon</string>
     <string name="tue">Tue</string>
     <string name="wed">Wed</string>
@@ -7,4 +9,55 @@
     <string name="fri">Fri</string>
     <string name="sat">Sat</string>
     <string name="sun">Sun</string>
+    
+    <!-- Training Stats -->
+    <string name="this_week">This week</string>
+    <string name="history">History</string>
+    
+    <!-- Training -->
+    <string name="training_completed">Training Completed!</string>
+    <string name="statistics">Statistics:</string>
+    <string name="training_number">Training #%1$d</string>
+    <string name="exercises_progress">Done: %1$d / %2$d exercises</string>
+    <string name="training_time">%1$s - %2$s</string>
+    <string name="duration_minutes">%1$d min</string>
+    <string name="exercise_progress">Exercise %1$d of %2$d</string>
+    <string name="remaining_time">%1$ds</string>
+    <string name="error_message">Error: %1$s</string>
+    <string name="exercise_time">Exercise time</string>
+    <string name="total_exercises">Total exercises</string>
+    <string name="points_reward">Points reward</string>
+    
+    <!-- Buttons -->
+    <string name="go_back">Go Back</string>
+    <string name="start_again">Start Again</string>
+    <string name="return_home">Return Home</string>
+    <string name="back">Back</string>
+    <string name="next">Next</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="train">Train</string>
+    
+    <!-- Today Info -->
+    <string name="trainings_hidden">Trainings hidden</string>
+    <string name="no_training_today">You haven\'t trained today</string>
+    <string name="training_notifications">Training notifications</string>
+    <string name="enable_notifications_description">Enable notifications to get daily training reminders</string>
+    <string name="add_notifications">Add notifications</string>
+    <string name="notification_time">%1$d:%2$d</string>
+    
+    <!-- Profile -->
+    <string name="trainings">Trainings</string>
+    <string name="courses">Courses</string>
+    <string name="statistics_name">Statistics %1$s</string>
+    
+    <!-- Calendar Screen -->
+    <string name="selected_date">Selected: %1$s</string>
+    <string name="no_trainings_for_day">No trainings for this day</string>
+    
+    <!-- Notifications -->
+    <string name="choose_notification_time">Choose notification time</string>
+    
+    <!-- Progress -->
+    <string name="progress_percentage">%1$d%%</string>
 </resources>

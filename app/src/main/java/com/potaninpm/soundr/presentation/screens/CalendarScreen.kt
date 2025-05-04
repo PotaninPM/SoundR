@@ -21,13 +21,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.potaninpm.soundr.R
 import com.potaninpm.soundr.domain.model.TrainingInfo
 import com.potaninpm.soundr.presentation.components.CalendarView
 import com.potaninpm.soundr.presentation.components.TrainingView
+import com.potaninpm.soundr.presentation.navigation.RootNavDestinations
 import com.potaninpm.soundr.presentation.viewModel.TrainingsViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -35,6 +39,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun CalendarScreen(
     viewModel: TrainingsViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     val trainingsByDate by viewModel.dayTrainings.collectAsState()
 
@@ -42,6 +47,9 @@ fun CalendarScreen(
         trainingsByDate = trainingsByDate,
         onDateSelected = { newDate ->
             viewModel.loadTrainingsByDate(newDate)
+        },
+        onCompletedTrainingClick = { training ->
+            navController.navigate("${RootNavDestinations.TrainingInfo}/${training.id}")
         }
     )
 }
@@ -50,6 +58,7 @@ fun CalendarScreen(
 private fun CalendarScreenContent(
     trainingsByDate: List<TrainingInfo>,
     onDateSelected: (LocalDate) -> Unit = {},
+    onCompletedTrainingClick: (TrainingInfo) -> Unit
 ) {
     var selectedDate by remember { mutableStateOf<LocalDate>(LocalDate.now()) }
 
@@ -76,7 +85,10 @@ private fun CalendarScreenContent(
 
             SelectedDayInfo(
                 date = selectedDate,
-                trainings = trainingsByDate
+                trainings = trainingsByDate,
+                onCompletedTrainingClick = { training ->
+                    onCompletedTrainingClick(training)
+                }
             )
         }
     }
@@ -85,7 +97,8 @@ private fun CalendarScreenContent(
 @Composable
 private fun SelectedDayInfo(
     date: LocalDate,
-    trainings: List<TrainingInfo>
+    trainings: List<TrainingInfo>,
+    onCompletedTrainingClick: (TrainingInfo) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -93,7 +106,7 @@ private fun SelectedDayInfo(
             .fillMaxSize(),
     ) {
         Text(
-            text = "Выбрано: ${date.format(DateTimeFormatter.ofPattern("MMMM d, yyyy"))}",
+            text = stringResource(R.string.selected_date, date.format(DateTimeFormatter.ofPattern("MMMM d, yyyy"))),
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Bold,
         )
@@ -101,6 +114,9 @@ private fun SelectedDayInfo(
         if (trainings.isNotEmpty()) {
             trainings.forEach { training ->
                 OutlinedCard(
+                    onClick = {
+                        onCompletedTrainingClick(training)
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp),
@@ -111,7 +127,7 @@ private fun SelectedDayInfo(
             }
         } else {
             Text(
-                text = "Нет тренировок на этот день",
+                text = stringResource(R.string.no_trainings_for_day),
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Normal,
                 fontSize = 20.sp,

@@ -137,8 +137,8 @@ fun HomeScreen(
                     },
                     faceDown = faceDown
                 )
-                1 -> CalendarScreen()
-                2 -> ProfileScreen()
+                1 -> CalendarScreen(navController = navController)
+                2 -> ProfileScreen(navController = navController)
             }
         }
     }
@@ -216,6 +216,9 @@ private fun HomeScreenContent(
             trainings = todayTrainings,
             onStartTrainingClick = {
                 navController.navigate(RootNavDestinations.Training)
+            },
+            onTrainingCardClick = { training ->
+                navController.navigate("${RootNavDestinations.TrainingInfo}/${training.id}")
             },
             showTrainings = showTrainings,
             onShowTrainingsChange = { newValue ->

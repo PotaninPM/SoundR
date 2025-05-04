@@ -16,6 +16,9 @@ class TrainingsRepository @Inject constructor(
     
     fun getAllTrainings(): Flow<List<CompletedTraining>> = 
         trainingsDao.getAllTrainings()
+
+    fun getTrainingById(id: Int): Flow<CompletedTraining?> =
+        trainingsDao.getTrainingById(id)
     
     suspend fun insertTraining(training: CompletedTraining) = 
         trainingsDao.insertTraining(training)

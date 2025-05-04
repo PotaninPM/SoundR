@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,6 +49,7 @@ fun TodayInfoCard(
     showTrainings: Boolean = true,
     onShowTrainingsChange: (Boolean) -> Unit = {},
     trainings: List<TrainingInfo>,
+    onTrainingCardClick: (TrainingInfo) -> Unit = {},
     onStartTrainingClick: () -> Unit = {}
 ) {
     val date = LocalDate.now()
@@ -108,6 +110,9 @@ fun TodayInfoCard(
 
                     trainings.forEach { training ->
                         Card(
+                            onClick = {
+                                onTrainingCardClick(training)
+                            },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 8.dp),
@@ -130,7 +135,7 @@ fun TodayInfoCard(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "Тренировки скрыты",
+                            text = stringResource(R.string.trainings_hidden),
                             color = Color.Gray,
                             style = MaterialTheme.typography.bodyMedium
                         )
@@ -140,7 +145,7 @@ fun TodayInfoCard(
                 Spacer(modifier = Modifier.padding(6.dp))
 
                 TrainButton(
-                    text = "Train",
+                    text = stringResource(R.string.train),
                     onClick = {
                         onStartTrainingClick()
                     }
@@ -150,7 +155,7 @@ fun TodayInfoCard(
                 Spacer(modifier = Modifier.padding(6.dp))
 
                 TrainButton(
-                    text = "Train",
+                    text = stringResource(R.string.train),
                     onClick = {
                         onStartTrainingClick()
                     }
@@ -159,7 +164,7 @@ fun TodayInfoCard(
                 Spacer(modifier = Modifier.padding(6.dp))
 
                 Text(
-                    text = "Сегодня вы не тренировались",
+                    text = stringResource(R.string.no_training_today),
                     color = Color.Gray,
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
@@ -179,7 +184,6 @@ fun NotificationsInfo(
     onShowNotificationsChange: (Boolean) -> Unit
 ) {
     var showNewTimePicker by remember { mutableStateOf(false) }
-    var reminderForEdit by remember { mutableStateOf<NotificationReminder?>(null) }
 
     val showNotificationsPainter = if (showNotifications) {
         painterResource(R.drawable.visibility_24px)
@@ -244,7 +248,7 @@ fun NotificationsInfo(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Уведомления о тренировках",
+                    text = stringResource(R.string.training_notifications),
                     fontWeight = FontWeight.SemiBold,
                     style = MaterialTheme.typography.titleMedium
                 )
@@ -264,7 +268,7 @@ fun NotificationsInfo(
             if (showNotifications) {
                 if (reminders.isEmpty()) {
                     Text(
-                        text = "Включите уведомления, чтобы получать напоминания о тренировках каждый день",
+                        text = stringResource(R.string.enable_notifications_description),
                         color = Color.Gray,
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
@@ -295,7 +299,7 @@ fun NotificationsInfo(
 
                 TrainButton(
                     onClick = { showNewTimePicker = true },
-                    text = "Добавить уведомления",
+                    text = stringResource(R.string.add_notifications),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 16.dp),
@@ -332,7 +336,7 @@ fun NotificationItem(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "${reminder.hour}:${reminder.minute}",
+                text = String.format("%02d:%02d", reminder.hour, reminder.minute),
                 style = MaterialTheme.typography.headlineLarge,
                 color = if (reminder.enabled) MaterialTheme.colorScheme.onSurface else Color.Gray,
             )

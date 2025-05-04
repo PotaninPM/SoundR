@@ -18,6 +18,9 @@ interface TrainingsDao {
     @Query("SELECT * FROM completed_trainings WHERE date = :date")
     fun getTrainingsByDate(date: LocalDate): Flow<List<CompletedTraining>>
 
+    @Query("SELECT * FROM completed_trainings WHERE id = :id")
+    fun getTrainingById(id: Int): Flow<CompletedTraining?>
+
     @Delete
     suspend fun deleteTraining(training: CompletedTraining)
 

@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -55,7 +56,7 @@ fun TrainingView(
                 .fillMaxWidth()
         ) {
             Text(
-                text = "Тренировка №${training.id}",
+                text = stringResource(R.string.training_number, training.id),
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -93,7 +94,7 @@ private fun DoneTrainingsInfo(training: TrainingInfo) {
         Spacer(modifier = Modifier.width(6.dp))
 
         Text(
-            text = "Done: ${training.madeExercisesId.size} / ${training.allExercisesId.size} exercises",
+            text = stringResource(R.string.exercises_progress, training.madeExercisesId.size, training.allExercisesId.size),
             style = MaterialTheme.typography.bodyMedium,
         )
     }
@@ -122,13 +123,13 @@ private fun TimeSection(
             Spacer(modifier = Modifier.width(4.dp))
 
             Text(
-                text = "$startTime - $endTime",
+                text = stringResource(R.string.training_time, startTime, endTime),
                 style = MaterialTheme.typography.bodyMedium
             )
         }
 
         Text(
-            text = "$durationMinutes min",
+            text = stringResource(R.string.duration_minutes, durationMinutes),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.Bold
