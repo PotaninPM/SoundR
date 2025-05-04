@@ -31,15 +31,17 @@ SoundR - это современное Android-приложение, разра�
 ## Скриншоты
 
 <div align="center">
-  <img src="screenshots/welcome_screen.png" alt="Экран приветствия" width="250"/>
-  <img src="screenshots/home_screen.png" alt="Главный экран" width="250"/>
-  <img src="screenshots/training_screen.png" alt="Экран тренировки" width="250"/>
+  <img src="screenshots/screenshot1.jpg" alt="Экран приветствия" width="250"/>
+  <img src="screenshots/screenshot2.jpg" alt="Главный экран" width="250"/>
+  <img src="screenshots/screenshot3.jpg" alt="Экран тренировки" width="250"/>
+  <img src="screenshots/screenshot4.jpg" alt="Экран тренировки" width="250"/>
 </div>
 
 <div align="center">
-  <img src="screenshots/profile_screen.png" alt="Экран профиля" width="250"/>
-  <img src="screenshots/calendar_screen.png" alt="Экран календаря" width="250"/>
-  <img src="screenshots/notifications_screen.png" alt="Экран уведомлений" width="250"/>
+  <img src="screenshots/screenshot5.jpg" alt="Экран профиля" width="250"/>
+  <img src="screenshots/screenshot6.jpg" alt="Экран календаря" width="250"/>
+  <img src="screenshots/screenshot7.jpg" alt="Экран уведомлений" width="250"/>
+  <img src="screenshots/screenshot8.jpg" alt="Экран уведомлений" width="250"/>
 </div>
 
 ## Технические детали
