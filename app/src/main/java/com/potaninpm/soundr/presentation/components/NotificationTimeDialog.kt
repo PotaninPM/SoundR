@@ -9,6 +9,8 @@ import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import java.time.LocalTime
 import java.util.Calendar
+import androidx.compose.ui.res.stringResource
+import com.potaninpm.soundr.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,7 +29,7 @@ fun NotificationTimeDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(text = "Выберите время уведомления")
+            Text(text = stringResource(R.string.choose_notification_time))
         },
         text = {
             TimePicker(
@@ -44,12 +46,12 @@ fun NotificationTimeDialog(
                     onConfirm(selectedTime)
                 }
             ) {
-                Text("OK")
+                Text(stringResource(R.string.ok))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(R.string.cancel))
             }
         }
     )

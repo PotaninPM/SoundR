@@ -21,11 +21,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.potaninpm.soundr.R
 import com.potaninpm.soundr.domain.model.TrainingInfo
 import com.potaninpm.soundr.presentation.components.CalendarView
 import com.potaninpm.soundr.presentation.components.TrainingView
@@ -104,7 +106,7 @@ private fun SelectedDayInfo(
             .fillMaxSize(),
     ) {
         Text(
-            text = "Выбрано: ${date.format(DateTimeFormatter.ofPattern("MMMM d, yyyy"))}",
+            text = stringResource(R.string.selected_date, date.format(DateTimeFormatter.ofPattern("MMMM d, yyyy"))),
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Bold,
         )
@@ -125,7 +127,7 @@ private fun SelectedDayInfo(
             }
         } else {
             Text(
-                text = "Нет тренировок на этот день",
+                text = stringResource(R.string.no_trainings_for_day),
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Normal,
                 fontSize = 20.sp,

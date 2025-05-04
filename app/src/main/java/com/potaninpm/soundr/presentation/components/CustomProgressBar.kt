@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.potaninpm.soundr.R
@@ -61,7 +62,7 @@ fun CustomProgressBar(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "${(progress * 100).toInt()}%",
+                        text = stringResource(R.string.progress_percentage, (progress * 100).toInt()),
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold,
                         color = progressColor,

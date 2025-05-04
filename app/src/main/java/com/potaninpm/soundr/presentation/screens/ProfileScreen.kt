@@ -53,10 +53,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.potaninpm.soundr.R
 import com.potaninpm.soundr.domain.model.TrainingInfo
 import com.potaninpm.soundr.presentation.components.TrainingView
 import com.potaninpm.soundr.presentation.components.UpperStatsPart
@@ -178,7 +180,7 @@ private fun ProfileScreenContent(
                     },
                     selected = selectedTabIndex == 0,
                     onClick = { selectedTabIndex = 0 },
-                    text = { Text("Тренировки") }
+                    text = { Text(stringResource(R.string.trainings)) }
                 )
                 Tab(
                     icon = {
@@ -186,7 +188,7 @@ private fun ProfileScreenContent(
                     },
                     selected = selectedTabIndex == 1,
                     onClick = { selectedTabIndex = 1 },
-                    text = { Text("Курсы") }
+                    text = { Text(stringResource(R.string.courses)) }
                 )
             }
 
@@ -230,7 +232,7 @@ fun UserStats(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = "Статистика $name",
+                text = stringResource(R.string.statistics_name, name),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary,
